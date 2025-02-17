@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Dein Warenkorb</title>
+  <style>
+    /* Allgemeines Styling */
+    body {
+      margin: 0;
+      font-family: "Roboto", sans-serif;
+      background-color: white;
+      color: black;
+    }
+
+    /* Header Styling */
+    header {
+      position: fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 150px;
+      background-color: #ffffff;
+      position: relative;
+      width: 100%;
+      top: 0;
+      left: 0;
+    }
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      position: absolute;
+      left: 20px;
+      transition: transform 0.3s ease-in-out;
+    }
+    .menu-toggle span {
+      background: black;
+      height: 2px;
+      width: 25px;
+      margin: 3px 0;
+    }
+    .header-center img {
+      max-height: 100px;
+    }
+    .header-icons {
+      display: flex;
+      gap: 15px;
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .header-icons img {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 15px;
+      background-color: #f8f8f8;
+      margin-top: 150px; /* damit das Menü nicht unter dem Header liegt */
+    }
+    nav a {
+      color: black;
+      text-decoration: none;
+      font-size: 14px;
+      text-transform: uppercase;
+      font-weight: 300;
+      font-family: "Roboto", sans-serif;
+      position: relative;
+    }
+    nav a::after {
+      content: "";
+      display: block;
+      width: 0;
+      height: 3px;
+      background: black;
+      transition: width 0.3s ease-in-out;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+    }
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .cart-container {
+      display: flex;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .cart-items {
+      flex: 1 1 60%;
+      min-width: 300px;
+    }
+    .cart-summary {
+      flex: 1 1 35%;
+      min-width: 250px;
+      padding: 20px;
+      background-color: #f5f5f5;
+      border-radius: 10px;
+      height: fit-content;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      border-bottom: 1px solid #ccc;
+    }
+    .cart-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      margin-right: 15px;
+    }
+    .cart-item-details {
+      flex: 1;
+    }
+    .cart-actions button {
+      padding: 5px 10px;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+    .checkout-buttons button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="menu-toggle" onclick="openMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="header-center">
+      <img src="logo.png" alt="Logo">
+    </div>
+    <div class="header-icons">
+      <img src="suchen.png" alt="Search" id="search-icon">
+      <a href="cart.html">
+        <img src="wk.png" alt="Cart">
+      </a>
+    </div>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="#">Gallery</a>
+    <a href="#">Pages</a>
+    <a href="#">Blog</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <h1>Dein Warenkorb</h1>
+
+  <div class="cart-container">
+    <div class="cart-items" id="cart-items">
+      <!-- Dynamischer Inhalt -->
+    </div>
+    <div class="cart-summary">
+      <h2>Bestellübersicht</h2>
+      <p id="cart-total">Gesamt: 0,00 €</p>
+      <div class="checkout-buttons">
+        <button onclick="clearCart()">Warenkorb leeren</button>
+        <button onclick="completeOrder()">Zur Kasse gehen</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Warenkorb laden und anzeigen
+    function loadCartItems() {
+      let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      const cartContainer = document.getElementById('cart-items');
+      const cartTotalElement = document.getElementById('cart-total');
+      
+      cartContainer.innerHTML = '';
+      if (cartItems.length === 0) {
+        cartContainer.innerHTML = '<p>Dein Warenkorb ist leer.</p>';
+        cartTotalElement.textContent = 'Gesamt: 0,00 €';
+        return;
+      }
+      
+      let gesamtpreis = 0;
+      cartItems.forEach((item, index) => {
+        const preisNum = parseFloat(item.preis) || 0;
+        const zeilenPreis = preisNum * item.menge;
+        gesamtpreis += zeilenPreis;
+        
+        const cartItem = document.createElement('div');
+        cartItem.classList.add('cart-item');
+        cartItem.innerHTML = `
+          <img src="${item.bild}" alt="${item.name}">
+          <div class="cart-item-details">
+            <p>${item.name}</p>
+            <p>${preisNum.toFixed(2)} €</p>
+          </div>
+          <div class="cart-actions">
+            <button onclick="increaseQuantity(${index})">+</button>
+            <span>${item.menge}</span>
+            <button onclick="decreaseQuantity(${index})">-</button>
+            <button onclick="removeItem(${index})">x</button>
+          </div>
+        `;
+        cartContainer.appendChild(cartItem);
+      });
+      cartTotalElement.textContent = `Gesamt: ${gesamtpreis.toFixed(2)} €`;
+    }
+
+    // Warenkorb im localStorage updaten
+    function updateCartItems(cartItems) {
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+      loadCartItems();
+    }
+
+    // Menge erhöhen
+    function increaseQuantity(index) {
+      let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      // Überprüfen, ob die neue Menge den Lagerbestand überschreitet
+      if (cartItems[index].menge < cartItems[index].lagerbestand) {
+        cartItems[index].menge += 1;
+        updateCartItems(cartItems);
+      } else {
+        alert("Die maximale verfügbare Menge für dieses Produkt wurde erreicht.");
+      }
+    }
+
+    // Menge verringern
+    function decreaseQuantity(index) {
+      let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      if (cartItems[index].menge > 1) {
+        cartItems[index].menge -= 1;
+      } else {
+        cartItems.splice(index, 1);
+      }
+      updateCartItems(cartItems);
+    }
+
+    // Artikel entfernen
+    function removeItem(index) {
+      let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      cartItems.splice(index, 1);
+      updateCartItems(cartItems);
+    }
+
+    // Warenkorb leeren
+    function clearCart() {
+      localStorage.removeItem('cartItems');
+      loadCartItems();
+    }
+
+    // "Zur Kasse gehen" -> Weiterleitung zu checkout.html
+    function completeOrder() {
+      window.location.href = "checkout.html";
+    }
+
+    window.addEventListener('DOMContentLoaded', loadCartItems);
+  </script>
+</body>
+</html>
