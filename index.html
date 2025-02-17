@@ -1,200 +1,282 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Produkte</title>
-    <style>
-       
-        /* Allgemeines Styling */
-        body {
-            margin: 0;
-            font-family: "Roboto", sans-serif;
-            background-color: white;
-            color: black;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produkte</title>
+  <style>
+    /* RESET */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        /* Header Styling */
-        header {
-            position: fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 150px;
-            background-color: #ffffff;
-            position: relative;
-        }
+    /* Allgemeines Styling */
+    body {
+      font-family: "Roboto", sans-serif;
+      background-color: white;
+      color: black;
+    }
 
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            position: absolute;
-            left: 20px;
-            transition: transform 0.3s ease-in-out;
-        }
+    /* Header Styling */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 150px;
+      background-color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      border-bottom: 1px solid #eee;
+    }
 
-        .menu-toggle span {
-            background: black;
-            height: 2px;
-            width: 25px;
-            margin: 3px 0;
-        }
+    /* Hamburger-Menü Button */
+    .menu-toggle {
+      display: none; /* wird in kleineren Viewports eingeblendet */
+      flex-direction: column;
+      cursor: pointer;
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: transform 0.3s ease-in-out;
+    }
+    .menu-toggle span {
+      background: black;
+      height: 2px;
+      width: 25px;
+      margin: 4px 0;
+    }
 
-        .header-center img {
-            max-height: 100px;
-        }
+    .header-center {
+      text-align: center;
+    }
+    .header-center img {
+      max-height: 100px;
+    }
 
-        .header-icons {
-            display: flex;
-            gap: 15px;
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
+    .header-icons {
+      display: flex;
+      gap: 15px;
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .header-icons img {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
 
-        .header-icons img {
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-        }
+    /* Navigation */
+    nav {
+      /* standardmäßig für große Bildschirme sichtbar, für kleine versteckt man sie per Media Query */
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+      height: 50px;
+      align-items: center;
+      background-color: #f8f8f8;
+      margin-top: 150px; /* Platz für den fixierten Header */
+    }
+    nav a {
+      color: black;
+      text-decoration: none;
+      font-size: 14px;
+      text-transform: uppercase;
+      font-weight: 300;
+      letter-spacing: 1px;
+      position: relative;
+      padding: 5px 0;
+    }
+    nav a::after {
+      content: "";
+      display: block;
+      width: 0;
+      height: 2px;
+      background: black;
+      transition: width 0.3s ease-in-out;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+    nav a:hover::after {
+      width: 100%;
+    }
 
-        /* Navigation */
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 15px;
-            background-color: #f8f8f8;
-        }
+    /* Container für die Produkte */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      /* Durch die fixe Header-Höhe + 50px Nav kann man hier optional mehr Abstand geben */
+    }
 
-        nav a {
-            color: black;
-            text-decoration: none;
-            font-size: 14px;
-            text-transform: uppercase;
-            font-weight: 300;
-            position: relative;
-            font-family: "Roboto", sans-serif; /* Schriftart übernehmen */
+    /* Grid mit Produkten */
+    .product-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
 
-        }
+    .product {
+      text-align: center;
+      display: block; /* Damit das <a> den gesamten Block klickbar macht */
+      color: black;   /* Linkfarbe anpassen, falls gewünscht */
+      text-decoration: none;
+    }
 
-        nav a::after {
-            content: "";
-            display: block;
-            width: 0;
-            height: 3px;
-            background: black;
-            transition: width 0.3s ease-in-out;
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-        }
+    .product img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border: 1px solid #ddd;
+    }
 
-        nav a:hover::after {
-            width: 100%;
-        }
-        .product-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 20px;
-            max-width: 1200px;
-            margin: auto;
-        }
-        .product {
-            text-align: center;
-        }
-        .product img {
-            width: 100%;
-            height: auto;
-            padding: 0;
-        }
-        .product h3 {
-            font-size: 14px;
-            font-weight: 400;
-            margin: 10px 0 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .product p {
-            font-size: 12px;
-            color: #777;
-        }
-    </style>
+    .product h3 {
+      font-size: 14px;
+      font-weight: 400;
+      margin: 10px 0 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .product p {
+      font-size: 12px;
+      color: #777;
+    }
+
+    /* RESPONSIVE: Bei kleinen Viewports Navigation per Button toggeln */
+    @media (max-width: 768px) {
+      /* Hamburger-Menü einblenden */
+      .menu-toggle {
+        display: flex;
+      }
+
+      .product-container{
+        margin-top: 40%;
+      }
+
+      /* Navigation verstecken, bis man das Menu toggelt */
+      nav {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 150px; /* direkt unterhalb des Headers */
+        left: 0;
+        width: 100%;
+        background-color: #f8f8f8;
+        padding: 10px 0;
+        z-index: 998; /* unter dem Header, aber über dem Rest */
+      }
+
+      nav a {
+        padding: 10px 0;
+        border-top: 1px solid #eee;
+        width: 100%;
+        text-align: center;
+      }
+      nav a:last-child {
+        border-bottom: 1px solid #eee;
+      }
+
+      /* Klasse .open für Navigation, wenn Hamburger geklickt */
+      nav.open {
+        display: flex;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="menu-toggle" onclick="openMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <div class="header-center">
-            <img src="logo.png" alt="Logo">
-        </div>
-        <div class="header-icons">
-            <img src="suchen.png" alt="Search" onclick="toggleSearch()" id="search-icon">
-            <a href="cart.html">
-                <img src="wk.png" alt="Cart">
-            </a>
-        </div>
-    </header>
-    
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="#">Gallery</a>
-        <a href="#">Pages</a>
-        <a href="#">Blog</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-    </nav>
-
-    <div class="container">
-        <div id="product-list" class="product-container"></div>
+  <header>
+    <!-- Hamburger Menü -->
+    <div class="menu-toggle" onclick="toggleNav()">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
 
-    <script>
-        const AIRTABLE_API_KEY = "patoJ0rbjGUzWuwKG.d2458e18c3f777dc341a8ff90fc66d55457ff3cafb219efbd82fa7575b05aaf9";
-        const BASE_ID = "appJ5tDISO3meA1Sf";
-        const TABLE_NAME = "Produkte";
+    <div class="header-center">
+      <img src="logo.png" alt="Logo">
+    </div>
 
-        async function fetchProducts() {
-            const response = await fetch(
-                `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${AIRTABLE_API_KEY}`,
-                    },
-                }
-            );
-            const data = await response.json();
-            return data.records;
+    <div class="header-icons">
+      <img src="suchen.png" alt="Search" id="search-icon">
+      <a href="cart.html">
+        <img src="wk.png" alt="Cart">
+      </a>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav id="mainNav">
+    <a href="index.html">Home</a>
+    <a href="#">Gallery</a>
+    <a href="#">Pages</a>
+    <a href="#">Blog</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <!-- Hauptbereich -->
+  <div class="container">
+    <div id="product-list" class="product-container"></div>
+  </div>
+
+  <script>
+    /* Hamburger-Menü Funktion */
+    function toggleNav() {
+      const nav = document.getElementById('mainNav');
+      nav.classList.toggle('open');
+    }
+
+    const AIRTABLE_API_KEY = "patoJ0rbjGUzWuwKG.d2458e18c3f777dc341a8ff90fc66d55457ff3cafb219efbd82fa7575b05aaf9";
+    const BASE_ID = "appJ5tDISO3meA1Sf";
+    const TABLE_NAME = "Produkte";
+
+    async function fetchProducts() {
+      const response = await fetch(
+        `https://api.airtable.com/v0/${BASE_ID}/${TABLE_NAME}`,
+        {
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+          },
         }
+      );
+      const data = await response.json();
+      return data.records;
+    }
 
-        async function displayProducts() {
-            const products = await fetchProducts();
-            const productList = document.getElementById("product-list");
-            productList.innerHTML = "";
-            
-            products.forEach(product => {
-                const productLink = document.createElement("a");
-                productLink.href = `product-detail.html?id=${product.id}`; // Verlinkung zu einer Detailseite mit Query-Parameter
-                productLink.classList.add("product");
+    async function displayProducts() {
+      const products = await fetchProducts();
+      const productList = document.getElementById("product-list");
+      productList.innerHTML = "";
+      
+      products.forEach(product => {
+        const productLink = document.createElement("a");
+        productLink.href = `product-detail.html?id=${product.id}`; // Verlinkung zur Detailseite
+        productLink.classList.add("product");
 
-                productLink.innerHTML = `
-                    <img src="${product.fields.Bild1 ? product.fields.Bild1[0].url : ''}" alt="${product.fields.ProduktName}">
-                    <h3>${product.fields.ProduktName}</h3>
-                    <p>CHF ${product.fields.Preis}</p>
-                `;
+        productLink.innerHTML = `
+          <img src="${product.fields.Bild1 ? product.fields.Bild1[0].url : ''}" 
+               alt="${product.fields.ProduktName || 'Kein Bild'}">
+          <h3>${product.fields.ProduktName || "Kein Produktname"}</h3>
+          <p>CHF ${product.fields.Preis || "n/a"}</p>
+        `;
 
-                productList.appendChild(productLink);
-            });
+        productList.appendChild(productLink);
+      });
+    }
 
-        }
-
-        displayProducts();
-    </script>
+    displayProducts();
+  </script>
 </body>
 </html>

@@ -3,45 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <title>Dein Warenkorb</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    /* RESET */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     /* Allgemeines Styling */
     body {
-      margin: 0;
       font-family: "Roboto", sans-serif;
       background-color: white;
       color: black;
     }
 
-    /* Header Styling */
+    /* Header (fixiert) */
     header {
       position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 150px;
+      background-color: #ffffff;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 150px;
-      background-color: #ffffff;
-      position: relative;
-      width: 100%;
-      top: 0;
-      left: 0;
+      z-index: 999;
+      border-bottom: 1px solid #eee;
     }
+
+    /* Hamburger-Menü (wird per Media Query sichtbar) */
     .menu-toggle {
       display: none;
       flex-direction: column;
       cursor: pointer;
       position: absolute;
       left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
       transition: transform 0.3s ease-in-out;
     }
     .menu-toggle span {
       background: black;
       height: 2px;
       width: 25px;
-      margin: 3px 0;
+      margin: 4px 0;
+    }
+
+    .header-center {
+      text-align: center;
     }
     .header-center img {
       max-height: 100px;
     }
+
     .header-icons {
       display: flex;
       gap: 15px;
@@ -58,12 +75,15 @@
 
     /* Navigation */
     nav {
+      /* für große Screens normal sichtbar, für mobile standardmäßig versteckt */
       display: flex;
       justify-content: center;
       gap: 20px;
-      padding: 15px;
+      width: 100%;
+      height: 50px;
+      align-items: center;
       background-color: #f8f8f8;
-      margin-top: 150px; /* damit das Menü nicht unter dem Header liegt */
+      margin-top: 150px; /* unter dem fixierten Header */
     }
     nav a {
       color: black;
@@ -71,24 +91,34 @@
       font-size: 14px;
       text-transform: uppercase;
       font-weight: 300;
-      font-family: "Roboto", sans-serif;
       position: relative;
+      padding: 5px 0;
     }
     nav a::after {
       content: "";
       display: block;
       width: 0;
-      height: 3px;
+      height: 2px;
       background: black;
       transition: width 0.3s ease-in-out;
       position: absolute;
-      bottom: -5px;
+      bottom: 0;
       left: 0;
     }
     nav a:hover::after {
       width: 100%;
     }
 
+    /* Überschrift */
+    h1 {
+      margin-top: 210px; /* damit H1 unter Header + Nav liegt */
+      text-align: center;
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    /* Container für Warenkorb */
     .cart-container {
       display: flex;
       justify-content: space-between;
@@ -96,7 +126,7 @@
       margin: 0 auto;
       padding: 20px;
       gap: 20px;
-      flex-wrap: wrap;
+      flex-wrap: wrap; /* bricht bei kleineren Viewports um */
     }
     .cart-items {
       flex: 1 1 60%;
@@ -104,45 +134,118 @@
     }
     .cart-summary {
       flex: 1 1 35%;
-      min-width: 250px;
+      min-width: 280px;
+      background-color: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 5px;
       padding: 20px;
-      background-color: #f5f5f5;
-      border-radius: 10px;
       height: fit-content;
     }
+    .cart-summary h2 {
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+
+    /* Einzelne Artikel */
     .cart-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 15px;
+      padding: 15px 0;
       border-bottom: 1px solid #ccc;
     }
+    .cart-item:last-child {
+      border-bottom: none;
+    }
     .cart-item img {
-      width: 60px;
-      height: 60px;
+      width: 70px;
+      height: 70px;
       object-fit: cover;
       margin-right: 15px;
     }
     .cart-item-details {
       flex: 1;
     }
+    .cart-item-details p {
+      margin: 3px 0;
+    }
+    .cart-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
     .cart-actions button {
       padding: 5px 10px;
-      margin: 0 5px;
       cursor: pointer;
+      border: 1px solid #999;
+      background: #fff;
+    }
+
+    /* Zusammenfassung & Checkout */
+    #cart-total {
+      font-size: 18px;
+      margin: 10px 0;
     }
     .checkout-buttons button {
       width: 100%;
       padding: 10px;
-      font-size: 16px;
       margin-top: 10px;
+      font-size: 14px;
+      background-color: black;
+      color: white;
+      border: none;
       cursor: pointer;
+    }
+    .checkout-buttons button:hover {
+      background-color: #333;
+    }
+
+    /* Mobile Navigation via .open-Klasse */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: flex; /* Hamburger-Menü einblenden */
+      }
+      nav {
+        display: none; /* Nav ausgeblendet, bis Hamburger geklickt wird */
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 150px;
+        left: 0;
+        width: 100%;
+        background-color: #f8f8f8;
+        z-index: 998;
+      }
+      nav.open {
+        display: flex;
+      }
+      nav a {
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+        border-top: 1px solid #eee;
+      }
+      nav a:last-child {
+        border-bottom: 1px solid #eee;
+      }
+      /* Cart-Layout auf Spalten-Layout umstellen */
+      .cart-container {
+        flex-direction: column;
+      }
+      .cart-items, .cart-summary {
+        width: 100%;
+        min-width: auto;
+      }
+      .cart-summary {
+        margin-top: 20px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- HEADER -->
   <header>
-    <div class="menu-toggle" onclick="openMenu()">
+    <div class="menu-toggle" onclick="toggleNav()">
       <span></span>
       <span></span>
       <span></span>
@@ -158,7 +261,8 @@
     </div>
   </header>
 
-  <nav>
+  <!-- NAVIGATION -->
+  <nav id="mainNav">
     <a href="index.html">Home</a>
     <a href="#">Gallery</a>
     <a href="#">Pages</a>
@@ -167,49 +271,60 @@
     <a href="#">Contact</a>
   </nav>
 
-  <h1>Dein Warenkorb</h1>
+  <!-- TITEL -->
+  <h1>Your Bag</h1>
 
+  <!-- WARENKORB -->
   <div class="cart-container">
+    <!-- Artikel-Liste -->
     <div class="cart-items" id="cart-items">
-      <!-- Dynamischer Inhalt -->
+      <!-- Dynamischer Inhalt via JS -->
     </div>
+
+    <!-- Zusammenfassung -->
     <div class="cart-summary">
-      <h2>Bestellübersicht</h2>
-      <p id="cart-total">Gesamt: 0,00 €</p>
+      <h2>Order Summary</h2>
+      <p id="cart-total">Total: 0,00 €</p>
       <div class="checkout-buttons">
-        <button onclick="clearCart()">Warenkorb leeren</button>
-        <button onclick="completeOrder()">Zur Kasse gehen</button>
+        <button onclick="clearCart()">Clear Bag</button>
+        <button onclick="completeOrder()">Checkout</button>
       </div>
     </div>
   </div>
 
   <script>
+    /* Hamburger-Menü Steuerung */
+    function toggleNav() {
+      const nav = document.getElementById('mainNav');
+      nav.classList.toggle('open');
+    }
+
     // Warenkorb laden und anzeigen
     function loadCartItems() {
       let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
       const cartContainer = document.getElementById('cart-items');
       const cartTotalElement = document.getElementById('cart-total');
-      
+
       cartContainer.innerHTML = '';
       if (cartItems.length === 0) {
-        cartContainer.innerHTML = '<p>Dein Warenkorb ist leer.</p>';
-        cartTotalElement.textContent = 'Gesamt: 0,00 €';
+        cartContainer.innerHTML = '<p>Your bag is empty.</p>';
+        cartTotalElement.textContent = 'Total: 0,00 €';
         return;
       }
-      
+
       let gesamtpreis = 0;
       cartItems.forEach((item, index) => {
         const preisNum = parseFloat(item.preis) || 0;
         const zeilenPreis = preisNum * item.menge;
         gesamtpreis += zeilenPreis;
-        
+
         const cartItem = document.createElement('div');
         cartItem.classList.add('cart-item');
         cartItem.innerHTML = `
           <img src="${item.bild}" alt="${item.name}">
           <div class="cart-item-details">
-            <p>${item.name}</p>
-            <p>${preisNum.toFixed(2)} €</p>
+            <p><strong>${item.name}</strong></p>
+            <p>Price: €${preisNum.toFixed(2)}</p>
           </div>
           <div class="cart-actions">
             <button onclick="increaseQuantity(${index})">+</button>
@@ -220,7 +335,8 @@
         `;
         cartContainer.appendChild(cartItem);
       });
-      cartTotalElement.textContent = `Gesamt: ${gesamtpreis.toFixed(2)} €`;
+
+      cartTotalElement.textContent = `Total: €${gesamtpreis.toFixed(2)}`;
     }
 
     // Warenkorb im localStorage updaten
@@ -232,12 +348,11 @@
     // Menge erhöhen
     function increaseQuantity(index) {
       let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-      // Überprüfen, ob die neue Menge den Lagerbestand überschreitet
       if (cartItems[index].menge < cartItems[index].lagerbestand) {
         cartItems[index].menge += 1;
         updateCartItems(cartItems);
       } else {
-        alert("Die maximale verfügbare Menge für dieses Produkt wurde erreicht.");
+        alert("You've reached the maximum available quantity of this product.");
       }
     }
 
@@ -265,7 +380,7 @@
       loadCartItems();
     }
 
-    // "Zur Kasse gehen" -> Weiterleitung zu checkout.html
+    // „Checkout“ -> Weiterleitung
     function completeOrder() {
       window.location.href = "checkout.html";
     }
