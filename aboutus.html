@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us</title>
+  <style>
+    /* RESET */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Allgemeines Styling */
+    body {
+      font-family: "Roboto", sans-serif;
+      background-color: #fff;
+      color: #333;
+      min-height: 100vh;
+    }
+
+    /* Header Styling */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background-color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      padding: 0 20px;
+    }
+
+    /* Hamburger-Icon (linke Seite) */
+    .hamburger {
+      cursor: pointer;
+      width: 30px;
+      height: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .hamburger span {
+      display: block;
+      height: 2px;
+      background: #000;
+      transition: all 0.3s ease-in-out;
+    }
+
+    /* Logo zentriert */
+    .header-center {
+      text-align: center;
+    }
+    .header-center img {
+      max-height: 60px;
+      object-fit: contain;
+    }
+
+    /* Icons für Suche und Warenkorb (rechte Seite) */
+    .header-icons {
+      display: flex;
+      gap: 15px;
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .header-icons img {
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+      filter: grayscale(50%);
+      transition: filter 0.3s ease;
+    }
+    .header-icons img:hover {
+      filter: grayscale(0);
+    }
+
+    /* OVERLAY & Side-Menu */
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out;
+      z-index: 1000; 
+    }
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 80%;
+      max-width: 300px;
+      height: 100%;
+      background: #fff;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+      z-index: 1001;
+      padding: 20px;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+    }
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .menu-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .menu-list li {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    .menu-list li a {
+      text-decoration: none;
+      color: #333;
+      font-size: 16px;
+      display: block;
+      transition: color 0.2s;
+    }
+    .menu-list li a:hover {
+      color: #000; 
+    }
+    .menu-open .menu-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+    .menu-open .side-menu {
+      transform: translateX(0);
+    }
+
+    /* Hauptinhaltsbereich (unterhalb des fixen Headers) */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px; /* Mehr Innenabstand für ein luftigeres Layout */
+      margin-top: 100px; /* Platz für den fixen Header */
+    }
+
+    /* Hero/Intro-Bereich (ähnlich dem Beispiel mit "What we do") */
+    .hero-section {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .hero-section .icon {
+      display: block;
+      margin: 0 auto 20px auto;
+      width: 50px;
+      height: 50px;
+    }
+    .hero-section h2 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #1f2f46; /* dunkler Blauton für markanteren Look */
+      margin-bottom: 20px;
+    }
+    .hero-section p {
+      font-size: 18px;
+      line-height: 1.6;
+      max-width: 700px;
+      margin: 0 auto;
+      color: #555;
+    }
+
+    /* Abschnitt für Team / Profile etc. */
+    .profile-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* Zwei Spalten */
+      gap: 40px;
+      align-items: start;
+    }
+    .profile {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      gap: 20px;
+    }
+    .profile img {
+      width: 100%;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+    .profile h3 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #1f2f46;
+    }
+    .profile h5 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #e2602c; /* z.B. orangener Akzent für Rolle/Position */
+      margin-bottom: 10px;
+    }
+    .profile p {
+      line-height: 1.5;
+      font-size: 15px;
+      color: #555;
+    }
+
+    /* Responsives Layout für kleinere Bildschirme */
+    @media(max-width: 768px) {
+      .profile-section {
+        grid-template-columns: 1fr;
+      }
+      .hero-section h2 {
+        font-size: 28px;
+      }
+      .hero-section p {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header-Bereich mit Hamburger, Logo, Icons -->
+  <header>
+    <div class="hamburger" id="hamburger-btn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="header-center">
+      <img src="logo.jpg" alt="Logo">
+    </div>
+    <div class="header-icons">
+      <img src="suchen.png" alt="Search" id="search-icon">
+      <a href="cart.html">
+        <img src="wk.png" alt="Cart">
+      </a>
+    </div>
+  </header>
+
+  <!-- Overlay & Side-Menu -->
+  <div class="menu-overlay" id="menu-overlay"></div>
+  <nav class="side-menu" id="side-menu">
+    <button class="close-btn" id="close-btn">✕</button>
+    <ul class="menu-list">
+      <li>
+        <a href="index.html">HOME</a>
+      </li>
+      <li>
+        <a href="aboutus.html">ABOUT US</a>
+      </li>
+      <li>
+        <a href="contact.html">CONTACT</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Haupt-Inhalt -->
+  <div class="container">
+    <!-- Hero-Section -->
+    <div class="hero-section">
+      <!-- Beispiel für ein Icon (SVG-Datei oder Bild) -->
+      <img class="icon" src="star.svg" alt="Star Icon">
+      <h2>What we do</h2>
+      <p>
+        When things are clear, easy, and relevant for fans, we create stronger bonds between 
+        football supporters and their favorite teams. At our webshop, we aim to bring you the 
+        best original football jerseys, connect you with the stories behind each design, and 
+        celebrate the passion that makes the beautiful game truly special.
+      </p>
+    </div>
+
+    <!-- Team/Profil-Bereich (Beispiel) -->
+    <div class="profile-section">
+      <!-- Beispiel-Profil 1 -->
+      <div class="profile">
+        <img src="person1.jpg" alt="Mitarbeiter 1">
+        <h3>Max Mustermann, MSc</h3>
+        <h5>CEO & Founder</h5>
+        <p>
+          Als engagierter Unternehmer mit großem Interesse am Sport hat Max die Vision, 
+          Fans weltweit den Zugang zu authentischen Trikots zu erleichtern. 
+          Mit Fokus auf Qualität und Nachhaltigkeit möchte er ein Einkaufserlebnis schaffen, 
+          das begeisterte Anhänger für lange Zeit begleitet.
+        </p>
+      </div>
+
+      <!-- Beispiel-Profil 2 -->
+      <div class="profile">
+        <img src="person2.jpg" alt="Mitarbeiter 2">
+        <h3>Laura Beispiel</h3>
+        <h5>Chief Marketing Officer</h5>
+        <p>
+          Laura bringt jahrelange Erfahrung im digitalen Marketing mit. 
+          Sie sorgt dafür, dass immer die neuesten Kollektionen, spannenden Aktionen 
+          und interessanten Hintergrundgeschichten rund um die Welt des Fußballs 
+          im Vordergrund stehen.
+        </p>
+      </div>
+    </div>
+    <!-- /profile-section -->
+
+  </div> <!-- /container -->
+
+  <script>
+    // Hamburger-Menü öffnen/schließen
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const closeBtn = document.getElementById('close-btn');
+    const overlay = document.getElementById('menu-overlay');
+    const body = document.body;
+
+    hamburgerBtn.addEventListener('click', () => {
+      body.classList.add('menu-open');
+    });
+    closeBtn.addEventListener('click', () => {
+      body.classList.remove('menu-open');
+    });
+    overlay.addEventListener('click', () => {
+      body.classList.remove('menu-open');
+    });
+  </script>
+</body>
+</html>

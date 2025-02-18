@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kontakt</title>
+  <!-- EmailJS und dein eigenes Script -->
+  <script src="script.js" type="text/javascript"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            emailjs.init({publicKey: "2A6gTcI-TfYHO5eRv",});
+        })();
+    </script>
+
+  <style>
+    /* RESET */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Allgemeines Styling */
+    body {
+      font-family: "Roboto", sans-serif;
+      background-color: #fff;
+      color: #333;
+      min-height: 100vh;
+    }
+
+    /* Header Styling */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background-color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      padding: 0 20px;
+    }
+
+    /* Hamburger-Icon (linke Seite) */
+    .hamburger {
+      cursor: pointer;
+      width: 30px;
+      height: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .hamburger span {
+      display: block;
+      height: 2px;
+      background: #000;
+      transition: all 0.3s ease-in-out;
+    }
+
+    /* Logo zentriert */
+    .header-center {
+      text-align: center;
+    }
+    .header-center img {
+      max-height: 60px;
+      object-fit: contain;
+    }
+
+    /* Icons für Suche und Warenkorb (rechte Seite) */
+    .header-icons {
+      display: flex;
+      gap: 15px;
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .header-icons img {
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+      filter: grayscale(50%);
+      transition: filter 0.3s ease;
+    }
+    .header-icons img:hover {
+      filter: grayscale(0);
+    }
+
+    /* OVERLAY & Side-Menu */
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out;
+      z-index: 1000; 
+    }
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 80%;
+      max-width: 300px;
+      height: 100%;
+      background: #fff;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+      z-index: 1001;
+      padding: 20px;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+    }
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .menu-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .menu-list li {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    .menu-list li a {
+      text-decoration: none;
+      color: #333;
+      font-size: 16px;
+      display: block;
+      transition: color 0.2s;
+    }
+    .menu-list li a:hover {
+      color: #000; 
+    }
+    .menu-open .menu-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+    .menu-open .side-menu {
+      transform: translateX(0);
+    }
+
+    /* Haupt-Inhalt */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      margin-top: 100px; /* Platz für fixen Header */
+    }
+
+    /* Kontakt-Formular-Styling */
+    .contact-heading {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .contact-heading h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .contact-heading p {
+      font-size: 16px;
+      color: #555;
+    }
+
+    .contact-form {
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      padding: 30px;
+      max-width: 600px;
+      margin: 0 auto;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .contact-form input[type="text"],
+    .contact-form input[type="email"],
+    .contact-form select,
+    .contact-form textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 15px;
+      font-family: "Roboto", sans-serif;
+      color: #333;
+      box-sizing: border-box;
+    }
+    .contact-form textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    .contact-form button {
+      background-color: #1f2f46; /* Dunkler Blauton (anpassbar) */
+      color: #fff;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: background-color 0.2s ease;
+    }
+    .contact-form button:hover {
+      background-color: #3b4e68;
+    }
+
+    /* Responsiv anpassen */
+    @media(max-width: 768px) {
+      .contact-heading h1 {
+        font-size: 24px;
+      }
+      .contact-heading p {
+        font-size: 14px;
+      }
+    }
+
+    /* Footer (optional, wenn du ihn wie in anderen Seiten behalten möchtest) */
+    footer {
+      background-color: #fff;
+      color: #000;
+      padding: 20px 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-top: 1px solid #ddd;
+    }
+    .footer-section {
+      flex: 1;
+      min-width: 150px;
+      padding: 10px;
+      text-align: center;
+    }
+    .footer-bottom {
+      background-color: black;
+      color: #fff;
+      padding: 5px 0;
+      text-align: center;
+    }
+    .social-links a {
+      margin: 0 5px;
+    }
+    .social-links img {
+      width: 30px;
+      height: auto;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="hamburger" id="hamburger-btn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="header-center">
+      <a href="index.html">
+        <img src="logo.jpg" alt="Logo">
+      </a>
+    </div>
+    <div class="header-icons">
+      <!-- Beispiel: Such-Icon -->
+      <img src="suchen.png" alt="Search" id="search-icon">
+      <!-- Beispiel: Warenkorb-Icon -->
+      <a href="cart.html">
+        <img src="wk.png" alt="Cart">
+      </a>
+    </div>
+  </header>
+
+  <!-- Overlay & Side-Menu -->
+  <div class="menu-overlay" id="menu-overlay"></div>
+  <nav class="side-menu" id="side-menu">
+    <button class="close-btn" id="close-btn">✕</button>
+    <ul class="menu-list">
+      <li>
+        <a href="index.html">HOME</a>
+      </li>
+      <li>
+        <a href="aboutus.html">ABOUT US</a>
+      </li>
+      <li>
+        <a href="contact.html">KONTAKT</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- HAUPT-BEREICH -->
+  <div class="container">
+    <div class="contact-heading">
+      <h1>Kontakt</h1>
+      <p>Wir freuen uns auf deine Nachricht!</p>
+    </div>
+    
+    <div class="contact-form">
+      <form id="contactForm">
+        <input type="text" id="fullname" name="fullname" placeholder="Vorname Nachname" required>
+        <input type="email" id="email_id" name="email_id" placeholder="Email" required>
+        <select id="subject" name="subject" required>
+          <option value="">Betreff auswählen</option>
+          <option value="Beschwerde">Beschwerde</option>
+          <option value="Frage zum Produkt">Frage zum Produkt</option>
+          <option value="Feedback">Feedback</option>
+          <option value="Sonstiges">Sonstiges</option>
+        </select>
+        <textarea id="message" name="message" placeholder="Deine Nachricht" required></textarea>
+        <button type="button" onclick="SendMail()">Senden</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER (Beispiel, falls du den gleichen Footer behalten möchtest) -->
+  <
+
+
+  <script>
+    // Hamburger-Menü öffnen/schließen
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const closeBtn = document.getElementById('close-btn');
+    const overlay = document.getElementById('menu-overlay');
+    const body = document.body;
+
+    hamburgerBtn.addEventListener('click', () => {
+      body.classList.add('menu-open');
+    });
+    closeBtn.addEventListener('click', () => {
+      body.classList.remove('menu-open');
+    });
+    overlay.addEventListener('click', () => {
+      body.classList.remove('menu-open');
+    });
+  </script>
+</body>
+</html>

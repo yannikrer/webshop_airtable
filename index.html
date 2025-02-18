@@ -17,7 +17,7 @@
       font-family: "Roboto", sans-serif;
       background-color: white;
       color: black;
-      height: 100vh; /* Damit das Overlay 100% Höhe füllen kann */
+      height: 100vh;
     }
 
     /* Header Styling */
@@ -31,7 +31,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 999; /* Header liegt über Content */
+      z-index: 999;
       border-bottom: 1px solid #eee;
       padding: 0 20px;
     }
@@ -79,7 +79,7 @@
       cursor: pointer;
     }
 
-    /* OVERLAY & Side-Menu – höherer z-index als Header */
+    /* OVERLAY & Side-Menu */
     .menu-overlay {
       position: fixed;
       top: 0;
@@ -90,24 +90,23 @@
       opacity: 0;
       visibility: hidden;
       transition: all 0.3s ease-in-out;
-      z-index: 1000; /* über dem Header (999) */
+      z-index: 1000; /* über dem Header */
     }
 
     .side-menu {
       position: fixed;
       top: 0;
       left: 0;
-      width: 80%;         /* Breite des Menüs */
-      max-width: 400px;   /* Optional: Begrenzung nach oben */
+      width: 80%;
+      max-width: 400px;
       height: 100%;
       background: #fff;
       transform: translateX(-100%);
       transition: transform 0.3s ease-in-out;
-      z-index: 1001;      /* über dem Overlay */
+      z-index: 1001;
       padding: 20px;
     }
 
-    /* Schließen-Button (X) im Menü */
     .close-btn {
       background: none;
       border: none;
@@ -116,33 +115,27 @@
       margin-bottom: 20px;
     }
 
-    /* Menü-Liste */
     .menu-list {
       list-style: none;
     }
-
     .menu-list li {
       border-bottom: 1px solid #ddd;
     }
-
     .menu-list li a {
       display: flex;
       align-items: center;
-      justify-content: space-between; /* Damit der Pfeil rechts landet */
+      justify-content: space-between;
       padding: 15px 0;
       text-decoration: none;
       color: #000;
       font-size: 16px;
       font-weight: 400;
     }
-
-    /* Pfeil rechts, wenn nötig */
     .menu-arrow {
       font-weight: bold;
       color: #999;
     }
 
-    /* Offen-Status: Menu & Overlay eingeblendet */
     .menu-open .menu-overlay {
       opacity: 1;
       visibility: visible;
@@ -156,8 +149,74 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
-      margin-top: 150px; /* Platz für fixierten Header */
+      margin-top: 150px;
     }
+
+    .filter-bar {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+    
+    /* dezente Hintergrundfarbe & abgerundete Ecken */
+    background-color: #fff;
+    border-radius: 8px;
+    
+    /* etwas Innenabstand */
+    padding: 10px 20px;
+  }
+
+  .filter-bar label {
+    font-weight: 500;
+    margin-right: 5px;
+    color: #333;
+  }
+
+  .filter-bar select {
+    /* Gesamte Breite definieren, falls du es wünschst */
+    min-width: 150px;
+    
+    /* Abgerundete Ecken */
+    border-radius: 6px;
+    
+    /* Dezent grauer Rahmen */
+    border: 1px solid #ccc;
+    
+    /* Hintergrundfarbe */
+    background-color: #f9f9f9;
+    
+    /* Gleiche Höhe & Innenabstände */
+    padding: 6px 10px;
+    
+    /* Moderne, schlichte Schrift */
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    color: #333;
+    
+    /* Cursor & Übergang */
+    cursor: pointer;
+    transition: border 0.2s ease;
+    
+    /* Pfeil ausblenden (soweit möglich) */
+    -moz-appearance: none;    /* Firefox */
+    -webkit-appearance: none; /* Safari & Chrome */
+    appearance: none;         /* Standard */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg%20xmlns="http://www.w3.org/2000/svg"%20width="10"%20height="10"%20viewBox="0%200%2010%2010"><path%20fill="%23999"%20d="M0%202l5%205%205-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+  }
+
+  /* Optionaler Hover-Effekt */
+  .filter-bar select:hover {
+    border-color: #888;
+  }
+
+  /* Optionaler Fokus-Effekt */
+  .filter-bar select:focus {
+    outline: none;
+    border-color: #333;
+  }
 
     /* Produkt-Grid */
     .product-container {
@@ -189,32 +248,22 @@
       font-size: 12px;
       color: #777;
     }
-
-    /* Beispielhaftes Media Query */
-    @media (max-width: 768px) {
-      .product-container {
-        margin-top: 0%;
-      }
-    }
   </style>
 </head>
 <body>
 
   <!-- Header-Bereich mit Hamburger, Logo, Icons -->
   <header>
-    <!-- Hamburger Icon -->
     <div class="hamburger" id="hamburger-btn">
       <span></span>
       <span></span>
       <span></span>
     </div>
 
-    <!-- Logo zentriert -->
     <div class="header-center">
       <img src="logo.jpg" alt="Logo">
     </div>
 
-    <!-- Such- und Warenkorb-Icons rechts -->
     <div class="header-icons">
       <img src="suchen.png" alt="Search" id="search-icon">
       <a href="cart.html">
@@ -223,53 +272,50 @@
     </div>
   </header>
 
-  <!-- Overlay & Side-Menu (über dem Header) -->
+  <!-- Overlay & Side-Menu -->
   <div class="menu-overlay" id="menu-overlay"></div>
   <nav class="side-menu" id="side-menu">
     <button class="close-btn" id="close-btn">✕</button>
     <ul class="menu-list">
-      <!-- Jede Zeile ist ein Menüpunkt mit Link -->
       <li>
-        <a href="index.html">
-          HOME
-          <!-- Pfeil, falls erwünscht: <span class="menu-arrow">›</span> -->
-        </a>
+        <a href="index.html">HOME</a>
       </li>
       <li>
-        <a href="watches.html">
-          WATCHES
-          <span class="menu-arrow">›</span>
-        </a>
+        <a href="aboutus.html">ABOUT US</a>
       </li>
       <li>
-        <a href="jewelry.html">
-          JEWELRY
-          <span class="menu-arrow">›</span>
-        </a>
-      </li>
-      <li>
-        <a href="info.html">
-          INFO
-          <span class="menu-arrow">›</span>
-        </a>
+        <a href="contact.html">CONTACT</a>
       </li>
     </ul>
   </nav>
 
   <!-- Haupt-Inhalt -->
   <div class="container">
+    <!-- Filter-Bereich -->
+    <div class="filter-bar">
+      <div>
+        <label for="landFilter">Land:</label>
+        <select id="landFilter">
+          <option value="">Alle Länder</option>
+        </select>
+      </div>
+      <div>
+        <label for="ligaFilter">Liga:</label>
+        <select id="ligaFilter">
+          <option value="">Alle Ligen</option>
+        </select>
+      </div>
+    </div>
+
     <!-- Produkt-Grid, befüllt via Airtable -->
     <div id="product-list" class="product-container"></div>
   </div>
 
   <script>
-    // Hamburger-Menü öffnen
+    // Hamburger-Menü öffnen/schließen
     const hamburgerBtn = document.getElementById('hamburger-btn');
-    // Schließen-Button (X) im Menü
     const closeBtn = document.getElementById('close-btn');
-    // Overlay
     const overlay = document.getElementById('menu-overlay');
-    // Body, um Klasse .menu-open zu steuern
     const body = document.body;
 
     hamburgerBtn.addEventListener('click', () => {
@@ -282,10 +328,13 @@
       body.classList.remove('menu-open');
     });
 
-    /* Airtable-Daten laden und anzeigen */
+    // Airtable-Zugangsdaten
     const AIRTABLE_API_KEY = "patoJ0rbjGUzWuwKG.d2458e18c3f777dc341a8ff90fc66d55457ff3cafb219efbd82fa7575b05aaf9";
     const BASE_ID = "appJ5tDISO3meA1Sf";
     const TABLE_NAME = "Produkte";
+
+    // Hier speichern wir alle Produkte global, damit wir sie filtern können
+    let allProducts = [];
 
     async function fetchProducts() {
       const response = await fetch(
@@ -300,27 +349,95 @@
       return data.records;
     }
 
-    async function displayProducts() {
-      const products = await fetchProducts();
+    async function init() {
+      // Produkte laden
+      allProducts = await fetchProducts();
+
+      // Filter-Dropdowns befüllen
+      populateFilters(allProducts);
+
+      // Alle Produkte beim Start anzeigen
+      displayProducts(allProducts);
+    }
+
+    // Filter-Dropdowns mit allen verfügbaren Land- und Liga-Werten befüllen
+    function populateFilters(products) {
+      const landSelect = document.getElementById('landFilter');
+      const ligaSelect = document.getElementById('ligaFilter');
+
+      // Eindeutige Land-Werte sammeln
+      const laender = [...new Set(products.map(p => p.fields.Land).filter(Boolean))];
+      // Eindeutige Liga-Werte sammeln
+      const ligen = [...new Set(products.map(p => p.fields.Liga).filter(Boolean))];
+
+      // Land-Optionen hinzufügen
+      laender.forEach(land => {
+        const option = document.createElement('option');
+        option.value = land;
+        option.textContent = land;
+        landSelect.appendChild(option);
+      });
+
+      // Liga-Optionen hinzufügen
+      ligen.forEach(liga => {
+        const option = document.createElement('option');
+        option.value = liga;
+        option.textContent = liga;
+        ligaSelect.appendChild(option);
+      });
+
+      // Event Listener auf Änderungen -> Filter neu anwenden
+      landSelect.addEventListener('change', filterProducts);
+      ligaSelect.addEventListener('change', filterProducts);
+    }
+
+    // Filterfunktion
+    function filterProducts() {
+      const selectedLand = document.getElementById('landFilter').value;
+      const selectedLiga = document.getElementById('ligaFilter').value;
+
+      const filtered = allProducts.filter(product => {
+        const land = product.fields.Land || "";
+        const liga = product.fields.Liga || "";
+
+        // Passt das Produkt zum ausgewählten Land (oder ist keines ausgewählt)?
+        const matchLand = !selectedLand || land === selectedLand;
+        // Passt das Produkt zur ausgewählten Liga (oder ist keine ausgewählt)?
+        const matchLiga = !selectedLiga || liga === selectedLiga;
+
+        return matchLand && matchLiga;
+      });
+
+      displayProducts(filtered);
+    }
+
+    // Produkte anzeigen
+    function displayProducts(products) {
       const productList = document.getElementById("product-list");
       productList.innerHTML = "";
 
       products.forEach(product => {
-        const productLink = document.createElement("a");
-        productLink.href = `product-detail.html?id=${product.id}`; // Link zur Detailseite
-        productLink.classList.add("product");
+        const link = document.createElement("a");
+        link.href = `product-detail.html?id=${product.id}`;
+        link.classList.add("product");
 
-        productLink.innerHTML = `
-          <img src="${product.fields.Bild1 ? product.fields.Bild1[0].url : ''}" 
-               alt="${product.fields.ProduktName || 'Kein Bild'}">
-          <h3>${product.fields.ProduktName || "Kein Produktname"}</h3>
-          <p>CHF ${product.fields.Preis || "n/a"}</p>
+        const bildUrl = product.fields.Bild1 && product.fields.Bild1[0]
+                        ? product.fields.Bild1[0].url
+                        : "";
+        const produktName = product.fields.ProduktName || "Kein Produktname";
+        const preis = product.fields.Preis || "n/a";
+
+        link.innerHTML = `
+          <img src="${bildUrl}" alt="${produktName}">
+          <h3>${produktName}</h3>
+          <p>CHF ${preis}</p>
         `;
-        productList.appendChild(productLink);
+        productList.appendChild(link);
       });
     }
 
-    displayProducts();
+    // Skript starten
+    init();
   </script>
 </body>
 </html>
