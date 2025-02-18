@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Produkte</title>
   <style>
     /* RESET */
@@ -17,6 +17,7 @@
       font-family: "Roboto", sans-serif;
       background-color: white;
       color: black;
+      height: 100vh; /* Damit das Overlay 100% Höhe füllen kann */
     }
 
     /* Header Styling */
@@ -30,35 +31,40 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 999;
+      z-index: 999; /* Header liegt über Content */
       border-bottom: 1px solid #eee;
+      padding: 0 20px;
     }
 
-    /* Hamburger-Menü Button */
-    .menu-toggle {
-      display: none; /* wird in kleineren Viewports eingeblendet */
-      flex-direction: column;
+    /* Hamburger-Icon (linke Seite) */
+    .hamburger {
       cursor: pointer;
+      width: 30px;
+      height: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       position: absolute;
       left: 20px;
       top: 50%;
       transform: translateY(-50%);
-      transition: transform 0.3s ease-in-out;
     }
-    .menu-toggle span {
-      background: black;
+    .hamburger span {
+      display: block;
       height: 2px;
-      width: 25px;
-      margin: 4px 0;
+      background: #000;
+      transition: all 0.3s ease-in-out;
     }
 
+    /* Logo zentriert */
     .header-center {
       text-align: center;
     }
     .header-center img {
-      max-height: 100px;
+      max-height: 70px;
     }
 
+    /* Icons für Suche und Warenkorb (rechte Seite) */
     .header-icons {
       display: flex;
       gap: 15px;
@@ -73,65 +79,98 @@
       cursor: pointer;
     }
 
-    /* Navigation */
-    nav {
-      /* standardmäßig für große Bildschirme sichtbar, für kleine versteckt man sie per Media Query */
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      width: 100%;
-      height: 50px;
-      align-items: center;
-      background-color: #f8f8f8;
-      margin-top: 150px; /* Platz für den fixierten Header */
-    }
-    nav a {
-      color: black;
-      text-decoration: none;
-      font-size: 14px;
-      text-transform: uppercase;
-      font-weight: 300;
-      letter-spacing: 1px;
-      position: relative;
-      padding: 5px 0;
-    }
-    nav a::after {
-      content: "";
-      display: block;
-      width: 0;
-      height: 2px;
-      background: black;
-      transition: width 0.3s ease-in-out;
-      position: absolute;
-      bottom: 0;
+    /* OVERLAY & Side-Menu – höherer z-index als Header */
+    .menu-overlay {
+      position: fixed;
+      top: 0;
       left: 0;
-    }
-    nav a:hover::after {
       width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out;
+      z-index: 1000; /* über dem Header (999) */
     }
 
-    /* Container für die Produkte */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 80%;         /* Breite des Menüs */
+      max-width: 400px;   /* Optional: Begrenzung nach oben */
+      height: 100%;
+      background: #fff;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+      z-index: 1001;      /* über dem Overlay */
+      padding: 20px;
+    }
+
+    /* Schließen-Button (X) im Menü */
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    /* Menü-Liste */
+    .menu-list {
+      list-style: none;
+    }
+
+    .menu-list li {
+      border-bottom: 1px solid #ddd;
+    }
+
+    .menu-list li a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* Damit der Pfeil rechts landet */
+      padding: 15px 0;
+      text-decoration: none;
+      color: #000;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    /* Pfeil rechts, wenn nötig */
+    .menu-arrow {
+      font-weight: bold;
+      color: #999;
+    }
+
+    /* Offen-Status: Menu & Overlay eingeblendet */
+    .menu-open .menu-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+    .menu-open .side-menu {
+      transform: translateX(0);
+    }
+
+    /* Container für Produkte unter dem fixen Header */
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
-      /* Durch die fixe Header-Höhe + 50px Nav kann man hier optional mehr Abstand geben */
+      margin-top: 150px; /* Platz für fixierten Header */
     }
 
-    /* Grid mit Produkten */
+    /* Produkt-Grid */
     .product-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
     }
-
     .product {
       text-align: center;
-      display: block; /* Damit das <a> den gesamten Block klickbar macht */
-      color: black;   /* Linkfarbe anpassen, falls gewünscht */
+      display: block;
+      color: black;
       text-decoration: none;
     }
-
     .product img {
       width: 100%;
       height: auto;
@@ -139,7 +178,6 @@
       margin: 0 auto;
       border: 1px solid #ddd;
     }
-
     .product h3 {
       font-size: 14px;
       font-weight: 400;
@@ -147,67 +185,36 @@
       text-transform: uppercase;
       letter-spacing: 1px;
     }
-
     .product p {
       font-size: 12px;
       color: #777;
     }
 
-    /* RESPONSIVE: Bei kleinen Viewports Navigation per Button toggeln */
+    /* Beispielhaftes Media Query */
     @media (max-width: 768px) {
-      /* Hamburger-Menü einblenden */
-      .menu-toggle {
-        display: flex;
-      }
-
-      .product-container{
-        margin-top: 40%;
-      }
-
-      /* Navigation verstecken, bis man das Menu toggelt */
-      nav {
-        display: none;
-        flex-direction: column;
-        align-items: center;
-        position: absolute;
-        top: 150px; /* direkt unterhalb des Headers */
-        left: 0;
-        width: 100%;
-        background-color: #f8f8f8;
-        padding: 10px 0;
-        z-index: 998; /* unter dem Header, aber über dem Rest */
-      }
-
-      nav a {
-        padding: 10px 0;
-        border-top: 1px solid #eee;
-        width: 100%;
-        text-align: center;
-      }
-      nav a:last-child {
-        border-bottom: 1px solid #eee;
-      }
-
-      /* Klasse .open für Navigation, wenn Hamburger geklickt */
-      nav.open {
-        display: flex;
+      .product-container {
+        margin-top: 0%;
       }
     }
   </style>
 </head>
 <body>
+
+  <!-- Header-Bereich mit Hamburger, Logo, Icons -->
   <header>
-    <!-- Hamburger Menü -->
-    <div class="menu-toggle" onclick="toggleNav()">
+    <!-- Hamburger Icon -->
+    <div class="hamburger" id="hamburger-btn">
       <span></span>
       <span></span>
       <span></span>
     </div>
 
+    <!-- Logo zentriert -->
     <div class="header-center">
-      <img src="logo.png" alt="Logo">
+      <img src="logo.jpg" alt="Logo">
     </div>
 
+    <!-- Such- und Warenkorb-Icons rechts -->
     <div class="header-icons">
       <img src="suchen.png" alt="Search" id="search-icon">
       <a href="cart.html">
@@ -216,28 +223,66 @@
     </div>
   </header>
 
-  <!-- Navigation -->
-  <nav id="mainNav">
-    <a href="index.html">Home</a>
-    <a href="#">Gallery</a>
-    <a href="#">Pages</a>
-    <a href="#">Blog</a>
-    <a href="#">About</a>
-    <a href="#">Contact</a>
+  <!-- Overlay & Side-Menu (über dem Header) -->
+  <div class="menu-overlay" id="menu-overlay"></div>
+  <nav class="side-menu" id="side-menu">
+    <button class="close-btn" id="close-btn">✕</button>
+    <ul class="menu-list">
+      <!-- Jede Zeile ist ein Menüpunkt mit Link -->
+      <li>
+        <a href="index.html">
+          HOME
+          <!-- Pfeil, falls erwünscht: <span class="menu-arrow">›</span> -->
+        </a>
+      </li>
+      <li>
+        <a href="watches.html">
+          WATCHES
+          <span class="menu-arrow">›</span>
+        </a>
+      </li>
+      <li>
+        <a href="jewelry.html">
+          JEWELRY
+          <span class="menu-arrow">›</span>
+        </a>
+      </li>
+      <li>
+        <a href="info.html">
+          INFO
+          <span class="menu-arrow">›</span>
+        </a>
+      </li>
+    </ul>
   </nav>
 
-  <!-- Hauptbereich -->
+  <!-- Haupt-Inhalt -->
   <div class="container">
+    <!-- Produkt-Grid, befüllt via Airtable -->
     <div id="product-list" class="product-container"></div>
   </div>
 
   <script>
-    /* Hamburger-Menü Funktion */
-    function toggleNav() {
-      const nav = document.getElementById('mainNav');
-      nav.classList.toggle('open');
-    }
+    // Hamburger-Menü öffnen
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    // Schließen-Button (X) im Menü
+    const closeBtn = document.getElementById('close-btn');
+    // Overlay
+    const overlay = document.getElementById('menu-overlay');
+    // Body, um Klasse .menu-open zu steuern
+    const body = document.body;
 
+    hamburgerBtn.addEventListener('click', () => {
+      body.classList.add('menu-open');
+    });
+    closeBtn.addEventListener('click', () => {
+      body.classList.remove('menu-open');
+    });
+    overlay.addEventListener('click', () => {
+      body.classList.remove('menu-open');
+    });
+
+    /* Airtable-Daten laden und anzeigen */
     const AIRTABLE_API_KEY = "patoJ0rbjGUzWuwKG.d2458e18c3f777dc341a8ff90fc66d55457ff3cafb219efbd82fa7575b05aaf9";
     const BASE_ID = "appJ5tDISO3meA1Sf";
     const TABLE_NAME = "Produkte";
@@ -259,10 +304,10 @@
       const products = await fetchProducts();
       const productList = document.getElementById("product-list");
       productList.innerHTML = "";
-      
+
       products.forEach(product => {
         const productLink = document.createElement("a");
-        productLink.href = `product-detail.html?id=${product.id}`; // Verlinkung zur Detailseite
+        productLink.href = `product-detail.html?id=${product.id}`; // Link zur Detailseite
         productLink.classList.add("product");
 
         productLink.innerHTML = `
@@ -271,7 +316,6 @@
           <h3>${product.fields.ProduktName || "Kein Produktname"}</h3>
           <p>CHF ${product.fields.Preis || "n/a"}</p>
         `;
-
         productList.appendChild(productLink);
       });
     }

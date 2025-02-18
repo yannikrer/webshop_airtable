@@ -12,15 +12,18 @@
       box-sizing: border-box;
     }
 
-    /* Allgemeines Styling */
+    /* Grundlegendes Layout */
     body {
       margin: 0;
       font-family: "Roboto", sans-serif;
-      background-color: white;
-      color: black;
+      background-color: #fff;
+      color: #000;
+      height: 100vh; /* Damit Overlay & Menü den ganzen Viewport abdecken */
     }
 
-    /* Header Styling */
+    /***********************
+     * HEADER-STYLING
+     ***********************/
     header {
       position: fixed;
       display: flex;
@@ -33,34 +36,35 @@
       left: 0;
       z-index: 999;
       border-bottom: 1px solid #eee;
+      padding: 0 20px;
+    }
+
+    /* Hamburger-Icon links */
+    .hamburger {
+      cursor: pointer;
+      width: 30px;
+      height: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .hamburger span {
+      display: block;
+      height: 2px;
+      background: #000;
+      transition: all 0.3s ease-in-out;
     }
 
     /* Logo zentriert */
     .header-center {
       text-align: center;
     }
-
     .header-center img {
-      max-height: 100px;
-    }
-
-    /* Menu-Toggle für Mobile */
-    .menu-toggle {
-      display: none; /* standardmäßig versteckt */
-      flex-direction: column;
-      cursor: pointer;
-      position: absolute;
-      left: 20px;
-      transition: transform 0.3s ease-in-out;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .menu-toggle span {
-      background: black;
-      height: 2px;
-      width: 25px;
-      margin: 4px 0;
+      max-height: 70px;
     }
 
     /* Icons oben rechts */
@@ -72,68 +76,88 @@
       top: 50%;
       transform: translateY(-50%);
     }
-
     .header-icons img {
       width: 30px;
       height: 30px;
       cursor: pointer;
     }
 
-    /* Navigation */
-    nav {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      width: 100%;
-      height: 50px;
-      align-items: center;
-      background-color: #f8f8f8;
-      margin-top: 150px; /* damit das Menü unter dem Header ist */
-    }
-
-    nav a {
-      color: black;
-      text-decoration: none;
-      font-size: 14px;
-      text-transform: uppercase;
-      font-weight: 300;
-      position: relative;
-      font-family: "Roboto", sans-serif;
-      letter-spacing: 1px;
-      padding: 5px 0;
-    }
-
-    nav a::after {
-      content: "";
-      display: block;
-      width: 0;
-      height: 2px;
-      background: black;
-      transition: width 0.3s ease-in-out;
-      position: absolute;
-      bottom: 0;
+    /***********************
+     * MENÜ & OVERLAY
+     ***********************/
+    .menu-overlay {
+      position: fixed;
+      top: 0;
       left: 0;
-    }
-
-    nav a:hover::after {
       width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out;
+      z-index: 1000; /* Über dem Header (999) */
     }
-
-    /* Produktdetail-Container */
-    #product-detail {
-      max-width: 1200px;
-      margin: 40px auto 20px auto; /* Abstand nach oben, um Header + Nav freizuhalten */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 80%;
+      max-width: 400px;
+      height: 100%;
+      background: #fff;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+      z-index: 1001; /* Über dem Overlay */
       padding: 20px;
     }
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    .menu-list {
+      list-style: none;
+    }
+    .menu-list li {
+      border-bottom: 1px solid #ddd;
+    }
+    .menu-list li a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 0;
+      text-decoration: none;
+      color: #000;
+      font-size: 16px;
+      font-weight: 400;
+    }
 
-    /* Flex-Layout für Bild links und Text rechts */
+    /* Offen-Status */
+    .menu-open .menu-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+    .menu-open .side-menu {
+      transform: translateX(0);
+    }
+
+    /***********************
+     * PRODUKT-BEREICH
+     ***********************/
+    #product-detail {
+      max-width: 1200px;
+      margin: 40px auto 20px auto; /* Platz nach oben */
+      padding: 20px;
+      margin-top: 150px; /* Platz für fixierten Header */
+    }
+
     .product-detail-flex {
       display: flex;
       flex-wrap: nowrap;
       align-items: flex-start;
     }
-
-    /* Bild links */
     .product-image {
       flex: 1;
       min-width: 300px;
@@ -141,116 +165,253 @@
       margin-right: 30px;
     }
     .product-image img {
-      width: 100%;
+      width: 110%;
       height: auto;
       object-fit: cover;
       border: 1px solid #ddd;
+      padding: 8px;
+      background-color: #f9f9f9;
+      margin-left: 30%;
     }
 
-    /* Infos rechts */
+    /* Produktinfos rechts */
     .product-info {
       flex: 2;
       min-width: 300px;
     }
-
     .product-info h1 {
       font-size: 28px;
       font-weight: bold;
       margin-bottom: 15px;
+      margin-left: 30%;
+      margin-top: 10%;
     }
-
     .product-info .description {
       font-size: 16px;
       margin-bottom: 15px;
       line-height: 1.4;
+      color: #444;
     }
-
     .product-info p {
       margin: 6px 0;
       line-height: 1.4;
+      color: #333;
+      margin-left: 30%;
     }
-
     .product-info .preis {
       font-size: 20px;
       font-weight: 700;
       color: #333;
       margin: 15px 0;
+      margin-left: 30%;
+
     }
 
+    /* Eingabefeld */
     .product-info input[type="number"] {
-      width: 50px;
-      padding: 4px;
+      width: 60px;
+      padding: 5px;
+      margin-left: 5px;
+      text-align: center;
     }
 
+    /* In den Warenkorb-Button */
     .product-info button {
-      background-color: black;
-      color: white;
+      background-color: #000;
+      color: #fff;
       border: none;
       padding: 10px 15px;
       cursor: pointer;
       margin-top: 10px;
       font-size: 14px;
       transition: background-color 0.3s ease;
-    }
+      text-transform: uppercase;
+      margin-left: 30%;
 
+    }
     .product-info button:hover {
-      background-color: #333;
+      background-color: #444;
     }
 
-    /* Responsive Anpassungen */
+    /* RESPONSIVE-Anpassungen */
     @media (max-width: 992px) {
       .product-detail-flex {
-        flex-wrap: wrap; /* Bilder und Text können umbrechen */
+        flex-wrap: wrap; /* Damit Bild und Infos umbrechen */
       }
       .product-image {
         margin-right: 0;
         margin-bottom: 20px;
-        margin-top: 25%;
       }
+      .product-image {
+        margin-top: 0%;
+      }
+      .product-image {
+      flex: 1;
+      min-width: 300px;
+      max-width: 400px;
+    }
+    .product-image img {
+      width: 110%;
+      height: auto;
+      object-fit: cover;
+      border: 1px solid #ddd;
+      padding: 8px;
+      background-color: #f9f9f9;
     }
 
+    /* Produktinfos rechts */
+    .product-info {
+      flex: 2;
+      min-width: 300px;
+    }
+    .product-info h1 {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 15px;
+
+    }
+    .product-info .description {
+      font-size: 16px;
+      margin-bottom: 15px;
+      line-height: 1.4;
+      color: #444;
+    }
+    .product-info p {
+      margin: 6px 0;
+      line-height: 1.4;
+      color: #333;
+      margin-left: 30%;
+    }
+    .product-info .preis {
+      font-size: 20px;
+      font-weight: 700;
+      color: #333;
+      margin: 15px 0;
+      margin-left: 30%;
+
+    }
+
+    /* Eingabefeld */
+    .product-info input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      margin-left: 5px;
+      text-align: center;
+      margin-left: 0%;
+    }
+
+    /* In den Warenkorb-Button */
+    .product-info button {
+      background-color: #000;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+      text-transform: uppercase;
+
+    }
+    .product-info button:hover {
+      background-color: #444;
+    }
+
+    }
+    
     @media (max-width: 768px) {
-      /* Header: Menu-Icon einblenden und Navigation verstecken */
-      .menu-toggle {
-        display: flex; /* jetzt Hamburger-Menü zeigen */
+      .product-image {
+        margin-top: 0%;
       }
-      nav {
-        display: none; /* Navigation ausblenden und nur nach Klick anzeigen */
-        flex-direction: column;
-        background-color: #f8f8f8;
-        position: absolute;
-        top: 150px; /* unter dem Header */
-        left: 0;
-        width: 100%;
-        padding: 10px 0;
-      }
-      nav a {
-        text-align: center;
-        padding: 10px 0;
-        border-top: 1px solid #eee;
-      }
-      nav a:last-child {
-        border-bottom: 1px solid #eee;
-      }
+      .product-image {
+      flex: 1;
+      min-width: 300px;
+      max-width: 400px;
+    }
+    .product-image img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border: 1px solid #ddd;
+      padding: 8px;
+      background-color: #f9f9f9;
+      margin-left: 0%;
     }
 
-    /* Wenn das Menü offen ist, wollen wir nav wieder anzeigen */
-    nav.open {
-      display: flex;
+    /* Produktinfos rechts */
+    .product-info {
+      flex: 2;
+      min-width: 300px;
+    }
+    .product-info h1 {
+      font-size: 28px;
+      font-weight: bold;
+      margin-left: 0%;
+      margin-bottom: 15px;
+
+    }
+    .product-info .description {
+      font-size: 16px;
+      margin-bottom: 15px;
+      line-height: 1.4;
+      color: #444;
+    }
+    .product-info p {
+      margin: 6px 0;
+      line-height: 1.4;
+      color: #333;
+    }
+    .product-info .preis {
+      font-size: 20px;
+      font-weight: 700;
+      color: #333;
+      margin: 15px 0;
+
+    }
+
+    /* Eingabefeld */
+    .product-info input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      margin-left: 5px;
+      text-align: center;
+    }
+
+    /* In den Warenkorb-Button */
+    .product-info button {
+      background-color: #000;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+      text-transform: uppercase;
+      margin-left: 0%;
+
+    }
+    .product-info button:hover {
+      background-color: #444;
+    }
+
     }
   </style>
 </head>
 <body>
+  <!-- Header -->
   <header>
-    <!-- Hamburger-Menü Symbol -->
-    <div class="menu-toggle" onclick="toggleNav()">
+    <!-- Hamburger Icon -->
+    <div class="hamburger" id="hamburger-btn">
       <span></span>
       <span></span>
       <span></span>
     </div>
+
     <div class="header-center">
-      <img src="logo.png" alt="Logo">
+      <img src="logo.jpg" alt="Logo">
     </div>
+
     <div class="header-icons">
       <img src="suchen.png" alt="Search" id="search-icon">
       <a href="cart.html">
@@ -258,25 +419,46 @@
       </a>
     </div>
   </header>
-  
-  <nav id="mainNav">
-    <a href="index.html">Home</a>
-    <a href="#">Gallery</a>
-    <a href="#">Pages</a>
-    <a href="#">Blog</a>
-    <a href="#">About</a>
-    <a href="#">Contact</a>
+
+  <!-- Overlay & Side-Menu -->
+  <div class="menu-overlay" id="menu-overlay"></div>
+  <nav class="side-menu" id="side-menu">
+    <button class="close-btn" id="close-btn">✕</button>
+    <ul class="menu-list">
+      <li><a href="index.html">HOME</a></li>
+      <li><a href="#">GALLERY</a></li>
+      <li><a href="#">PAGES</a></li>
+      <li><a href="#">BLOG</a></li>
+      <li><a href="#">ABOUT</a></li>
+      <li><a href="#">CONTACT</a></li>
+    </ul>
   </nav>
 
-  <div id="product-detail"></div>
+  <!-- Produktdetail-Bereich -->
+  <div id="product-detail">
 
   <script>
-    /* Mobile Navigation ein-/ausblenden */
-    function toggleNav() {
-      const nav = document.getElementById('mainNav');
-      nav.classList.toggle('open');
-    }
+    /* -- Hamburger-Menü-Funktion -- */
+    const body = document.body;
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const menuOverlay = document.getElementById('menu-overlay');
+    const sideMenu = document.getElementById('side-menu');
+    const closeBtn = document.getElementById('close-btn');
 
+    // Menü öffnen
+    hamburgerBtn.addEventListener('click', () => {
+      body.classList.add('menu-open');
+    });
+    // Menü schließen über X
+    closeBtn.addEventListener('click', () => {
+      body.classList.remove('menu-open');
+    });
+    // Menü schließen über Overlay
+    menuOverlay.addEventListener('click', () => {
+      body.classList.remove('menu-open');
+    });
+
+    /* -- Airtable-Logik -- */
     const AIRTABLE_API_KEY = "patoJ0rbjGUzWuwKG.d2458e18c3f777dc341a8ff90fc66d55457ff3cafb219efbd82fa7575b05aaf9";
     const BASE_ID = "appJ5tDISO3meA1Sf";
     const PRODUCTS_TABLE = "Produkte";
@@ -324,21 +506,22 @@
               <p><strong>Stoff:</strong> ${productData.fields.Stoff || "Keine Angabe"}</p>
               <p class="preis"><strong>Preis:</strong> ${productData.fields.Preis || "Kein Preis"}</p>
               <p><strong>Grösse:</strong> ${productData.fields.Grösse || "Keine Grössenangabe"}</p>
+              <p><strong>Spieler:</strong> ${productData.fields.Spieler || "Keine Bedruckung"}</p>
               <p><strong>Lagerbestand:</strong> ${lagerbestand}</p>
 
               <p>
-                Wunschmenge: 
-                <input 
-                  type="number" 
-                  id="quantity" 
-                  value="1" 
-                  min="1" 
-                  max="${lagerbestand}" 
+                Wunschmenge:
+                <input
+                  type="number"
+                  id="quantity"
+                  value="1"
+                  min="1"
+                  max="${lagerbestand}"
                   ${disableAttribute}
                 >
               </p>
-              <button 
-                onclick="addToCart('${productData.id}')" 
+              <button
+                onclick="addToCart('${productData.id}')"
                 ${disableAttribute}
               >
                 In den Warenkorb
@@ -365,12 +548,10 @@
       }
 
       const lagerbestand = productData.fields.Lagerbestand || 0;
-      
       if (lagerbestand === 0) {
         alert("Dieses Produkt ist derzeit nicht auf Lager.");
         return;
       }
-
       if (quantity > lagerbestand) {
         alert(`Die gewünschte Menge überschreitet den Lagerbestand.`);
         return;
@@ -389,12 +570,14 @@
       let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
       const existingItemIndex = cartItems.findIndex(item => item.id === cartItem.id);
       if (existingItemIndex > -1) {
+        // Bestehendes Produkt erhöhen
         if (cartItems[existingItemIndex].menge + quantity > lagerbestand) {
           alert("Die maximale verfügbare Menge für dieses Produkt wurde erreicht.");
           return;
         }
         cartItems[existingItemIndex].menge += quantity;
       } else {
+        // Neues Produkt hinzufügen
         cartItems.push(cartItem);
       }
 

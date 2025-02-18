@@ -17,9 +17,10 @@
       font-family: "Roboto", sans-serif;
       background-color: white;
       color: black;
+      height: 100vh; /* Damit Overlay & Menü den ganzen Viewport füllen können */
     }
 
-    /* Header (fixiert) */
+    /* HEADER (fixiert) */
     header {
       position: fixed;
       top: 0;
@@ -32,33 +33,38 @@
       align-items: center;
       z-index: 999;
       border-bottom: 1px solid #eee;
+      padding: 0 20px;
     }
 
-    /* Hamburger-Menü (wird per Media Query sichtbar) */
-    .menu-toggle {
-      display: none;
-      flex-direction: column;
+    /* Hamburger-Icon (linke Seite) */
+    .hamburger {
       cursor: pointer;
+      width: 30px;
+      height: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
       position: absolute;
       left: 20px;
       top: 50%;
       transform: translateY(-50%);
-      transition: transform 0.3s ease-in-out;
     }
-    .menu-toggle span {
-      background: black;
+    .hamburger span {
+      display: block;
       height: 2px;
-      width: 25px;
-      margin: 4px 0;
+      background: #000;
+      transition: all 0.3s ease-in-out;
     }
 
+    /* Logo zentriert */
     .header-center {
       text-align: center;
     }
     .header-center img {
-      max-height: 100px;
+      max-height: 70px;
     }
 
+    /* Icons (rechte Seite) */
     .header-icons {
       display: flex;
       gap: 15px;
@@ -73,45 +79,72 @@
       cursor: pointer;
     }
 
-    /* Navigation */
-    nav {
-      /* für große Screens normal sichtbar, für mobile standardmäßig versteckt */
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      width: 100%;
-      height: 50px;
-      align-items: center;
-      background-color: #f8f8f8;
-      margin-top: 150px; /* unter dem fixierten Header */
-    }
-    nav a {
-      color: black;
-      text-decoration: none;
-      font-size: 14px;
-      text-transform: uppercase;
-      font-weight: 300;
-      position: relative;
-      padding: 5px 0;
-    }
-    nav a::after {
-      content: "";
-      display: block;
-      width: 0;
-      height: 2px;
-      background: black;
-      transition: width 0.3s ease-in-out;
-      position: absolute;
-      bottom: 0;
+    /* OVERLAY und Side-Menu (über dem Header) */
+    .menu-overlay {
+      position: fixed;
+      top: 0;
       left: 0;
-    }
-    nav a:hover::after {
       width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out;
+      z-index: 1000; /* über dem Header (999) */
+    }
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 80%;         /* Breite des Menüs */
+      max-width: 400px;   /* optionales Maximum */
+      height: 100%;
+      background: #fff;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease-in-out;
+      z-index: 1001;      /* über dem Overlay */
+      padding: 20px;
+    }
+
+    /* Close-Button (X) oben links im Menü */
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    /* Liste der Menüpunkte */
+    .menu-list {
+      list-style: none;
+    }
+    .menu-list li {
+      border-bottom: 1px solid #ddd;
+    }
+    .menu-list li a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 0;
+      text-decoration: none;
+      color: #000;
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    /* Offen-Status: Overlay & Menü werden sichtbar */
+    .menu-open .menu-overlay {
+      opacity: 1;
+      visibility: visible;
+    }
+    .menu-open .side-menu {
+      transform: translateX(0);
     }
 
     /* Überschrift */
     h1 {
-      margin-top: 210px; /* damit H1 unter Header + Nav liegt */
+      margin-top: 210px; /* Platz für fixierten Header */
       text-align: center;
       font-size: 24px;
       font-weight: 500;
@@ -200,35 +233,8 @@
       background-color: #333;
     }
 
-    /* Mobile Navigation via .open-Klasse */
+    /* Mobile: cart-Layout auf Spalten-Layout umstellen */
     @media (max-width: 768px) {
-      .menu-toggle {
-        display: flex; /* Hamburger-Menü einblenden */
-      }
-      nav {
-        display: none; /* Nav ausgeblendet, bis Hamburger geklickt wird */
-        flex-direction: column;
-        align-items: center;
-        position: absolute;
-        top: 150px;
-        left: 0;
-        width: 100%;
-        background-color: #f8f8f8;
-        z-index: 998;
-      }
-      nav.open {
-        display: flex;
-      }
-      nav a {
-        width: 100%;
-        text-align: center;
-        padding: 10px 0;
-        border-top: 1px solid #eee;
-      }
-      nav a:last-child {
-        border-bottom: 1px solid #eee;
-      }
-      /* Cart-Layout auf Spalten-Layout umstellen */
       .cart-container {
         flex-direction: column;
       }
@@ -243,16 +249,20 @@
   </style>
 </head>
 <body>
-  <!-- HEADER -->
+
+  <!-- Header -->
   <header>
-    <div class="menu-toggle" onclick="toggleNav()">
+    <!-- Hamburger-Icon -->
+    <div class="hamburger" id="hamburger-btn">
       <span></span>
       <span></span>
       <span></span>
     </div>
+
     <div class="header-center">
-      <img src="logo.png" alt="Logo">
+      <img src="logo.jpg" alt="Logo">
     </div>
+
     <div class="header-icons">
       <img src="suchen.png" alt="Search" id="search-icon">
       <a href="cart.html">
@@ -261,20 +271,36 @@
     </div>
   </header>
 
-  <!-- NAVIGATION -->
-  <nav id="mainNav">
-    <a href="index.html">Home</a>
-    <a href="#">Gallery</a>
-    <a href="#">Pages</a>
-    <a href="#">Blog</a>
-    <a href="#">About</a>
-    <a href="#">Contact</a>
+  <!-- Overlay & Side-Menu -->
+  <div class="menu-overlay" id="menu-overlay"></div>
+  <nav class="side-menu" id="side-menu">
+    <button class="close-btn" id="close-btn">✕</button>
+    <ul class="menu-list">
+      <li>
+        <a href="index.html">HOME</a>
+      </li>
+      <li>
+        <a href="#">GALLERY</a>
+      </li>
+      <li>
+        <a href="#">PAGES</a>
+      </li>
+      <li>
+        <a href="#">BLOG</a>
+      </li>
+      <li>
+        <a href="#">ABOUT</a>
+      </li>
+      <li>
+        <a href="#">CONTACT</a>
+      </li>
+    </ul>
   </nav>
 
-  <!-- TITEL -->
+  <!-- Hauptüberschrift -->
   <h1>Your Bag</h1>
 
-  <!-- WARENKORB -->
+  <!-- Warenkorb-Bereich -->
   <div class="cart-container">
     <!-- Artikel-Liste -->
     <div class="cart-items" id="cart-items">
@@ -293,13 +319,27 @@
   </div>
 
   <script>
-    /* Hamburger-Menü Steuerung */
-    function toggleNav() {
-      const nav = document.getElementById('mainNav');
-      nav.classList.toggle('open');
-    }
+    /***** Hamburger-Menü Funktionalität *****/
+    const body = document.body;
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const menuOverlay = document.getElementById('menu-overlay');
+    const sideMenu = document.getElementById('side-menu');
+    const closeBtn = document.getElementById('close-btn');
 
-    // Warenkorb laden und anzeigen
+    // Menü öffnen
+    hamburgerBtn.addEventListener('click', () => {
+      body.classList.add('menu-open');
+    });
+    // Menü schließen über X
+    closeBtn.addEventListener('click', () => {
+      body.classList.remove('menu-open');
+    });
+    // Menü schließen über Overlay
+    menuOverlay.addEventListener('click', () => {
+      body.classList.remove('menu-open');
+    });
+
+    /***** Warenkorb-Funktionen *****/
     function loadCartItems() {
       let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
       const cartContainer = document.getElementById('cart-items');
@@ -339,7 +379,6 @@
       cartTotalElement.textContent = `Total: €${gesamtpreis.toFixed(2)}`;
     }
 
-    // Warenkorb im localStorage updaten
     function updateCartItems(cartItems) {
       localStorage.setItem('cartItems', JSON.stringify(cartItems));
       loadCartItems();
@@ -362,6 +401,7 @@
       if (cartItems[index].menge > 1) {
         cartItems[index].menge -= 1;
       } else {
+        // Menge 1 -> klick auf "-" entfernt das Produkt
         cartItems.splice(index, 1);
       }
       updateCartItems(cartItems);
