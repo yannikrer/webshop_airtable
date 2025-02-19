@@ -18,7 +18,7 @@
       font-family: "Roboto", sans-serif;
       background-color: #fff;
       color: #000;
-      height: 100vh; /* Damit Overlay & Menü den ganzen Viewport abdecken */
+      height: 80vh; /* Damit Overlay & Menü den ganzen Viewport abdecken */
     }
 
     /***********************
@@ -165,12 +165,11 @@
       margin-right: 30px;
     }
     .product-image img {
-      width: 110%;
+      width: 150%;
       height: auto;
       object-fit: cover;
       border: 1px solid #ddd;
       padding: 8px;
-      background-color: #f9f9f9;
       margin-left: 30%;
     }
 
@@ -180,10 +179,10 @@
       min-width: 300px;
     }
     .product-info h1 {
-      font-size: 28px;
+      font-size: 35px;
       font-weight: bold;
       margin-bottom: 15px;
-      margin-left: 30%;
+      margin-left: 50%;
       margin-top: 10%;
     }
     .product-info .description {
@@ -196,15 +195,15 @@
       margin: 6px 0;
       line-height: 1.4;
       color: #333;
-      margin-left: 30%;
+      margin-left: 50%;
+      font-size: 18px;
     }
     .product-info .preis {
       font-size: 20px;
       font-weight: 700;
       color: #333;
       margin: 15px 0;
-      margin-left: 30%;
-
+      margin-left: 50%;
     }
 
     /* Eingabefeld */
@@ -215,25 +214,49 @@
       text-align: center;
     }
 
-    /* In den Warenkorb-Button */
-    .product-info button {
-      background-color: #000;
-      color: #fff;
+     /* Button-Design für "In den Warenkorb" */
+     .btn {
+      width: 13.5em;
+      height: 3.3em;
+      margin: 1.0em;
+      background: black;
+      color: white;
       border: none;
-      padding: 10px 15px;
+      border-radius: 2em;
+      font-size: 13px;
+      font-weight: bold;
       cursor: pointer;
-      margin-top: 10px;
-      font-size: 14px;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
       transition: background-color 0.3s ease;
-      text-transform: uppercase;
-      margin-left: 30%;
-
-    }
-    .product-info button:hover {
-      background-color: #444;
+      margin-left: 50%;
     }
 
-    /* RESPONSIVE-Anpassungen */
+    .btn:hover {
+      color: black;
+    }
+
+    .btn:after {
+      content: "";
+      background: white;
+      position: absolute;
+      z-index: -1;
+      left: -20%;
+      right: -20%;
+      top: 0;
+      bottom: 0;
+      transform: skewX(-45deg) scale(0, 1);
+      transition: all 0.5s;
+    }
+
+    .btn:hover:after {
+      transform: skewX(-45deg) scale(1, 1);
+      -webkit-transition: all 0.5s;
+      transition: all 0.5s;
+    }
+
+    /* Responsive Anpassungen */
     @media (max-width: 992px) {
       .product-detail-flex {
         flex-wrap: wrap; /* Damit Bild und Infos umbrechen */
@@ -245,157 +268,34 @@
       .product-image {
         margin-top: 0%;
       }
-      .product-image {
-      flex: 1;
-      min-width: 300px;
-      max-width: 400px;
-    }
-    .product-image img {
-      width: 110%;
-      height: auto;
-      object-fit: cover;
-      border: 1px solid #ddd;
-      padding: 8px;
-      background-color: #f9f9f9;
-    }
-
-    /* Produktinfos rechts */
-    .product-info {
-      flex: 2;
-      min-width: 300px;
-    }
-    .product-info h1 {
-      font-size: 28px;
-      font-weight: bold;
-      margin-bottom: 15px;
-
-    }
-    .product-info .description {
-      font-size: 16px;
-      margin-bottom: 15px;
-      line-height: 1.4;
-      color: #444;
-    }
-    .product-info p {
-      margin: 6px 0;
-      line-height: 1.4;
-      color: #333;
-      margin-left: 30%;
-    }
-    .product-info .preis {
-      font-size: 20px;
-      font-weight: 700;
-      color: #333;
-      margin: 15px 0;
-      margin-left: 30%;
-
-    }
-
-    /* Eingabefeld */
-    .product-info input[type="number"] {
-      width: 60px;
-      padding: 5px;
-      margin-left: 5px;
-      text-align: center;
-      margin-left: 0%;
-    }
-
-    /* In den Warenkorb-Button */
-    .product-info button {
-      background-color: #000;
-      color: #fff;
-      border: none;
-      padding: 10px 15px;
-      cursor: pointer;
-      margin-top: 10px;
-      font-size: 14px;
-      transition: background-color 0.3s ease;
-      text-transform: uppercase;
-
-    }
-    .product-info button:hover {
-      background-color: #444;
-    }
-
-    }
-    
-    @media (max-width: 768px) {
-      .product-image {
-        margin-top: 0%;
+      .product-image img {
+        width: 110%;
+        height: auto;
+        object-fit: cover;
+        padding: 8px;
       }
-      .product-image {
-      flex: 1;
-      min-width: 300px;
-      max-width: 400px;
-    }
-    .product-image img {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-      border: 1px solid #ddd;
-      padding: 8px;
-      background-color: #f9f9f9;
-      margin-left: 0%;
+      .product-info h1 {
+        margin-left: 30%;
+      }
     }
 
-    /* Produktinfos rechts */
-    .product-info {
-      flex: 2;
-      min-width: 300px;
-    }
-    .product-info h1 {
-      font-size: 28px;
-      font-weight: bold;
-      margin-left: 0%;
-      margin-bottom: 15px;
-
-    }
-    .product-info .description {
-      font-size: 16px;
-      margin-bottom: 15px;
-      line-height: 1.4;
-      color: #444;
-    }
-    .product-info p {
-      margin: 6px 0;
-      line-height: 1.4;
-      color: #333;
-    }
-    .product-info .preis {
-      font-size: 20px;
-      font-weight: 700;
-      color: #333;
-      margin: 15px 0;
-
+    @media (max-width: 768px) {
+      .product-image img {
+        width: 100%;
+        margin-left: 0%;
+      }
+      .product-info h1 {
+        margin-left: 0%;
+      }
+      .product-info p,
+      .product-info .preis {
+        margin-left: 0%;
+      }
+      .product-info button {
+        margin-left: 0%;
+      }
     }
 
-    /* Eingabefeld */
-    .product-info input[type="number"] {
-      width: 60px;
-      padding: 5px;
-      margin-left: 5px;
-      text-align: center;
-    }
-
-    /* In den Warenkorb-Button */
-    .product-info button {
-      background-color: #000;
-      color: #fff;
-      border: none;
-      padding: 10px 15px;
-      cursor: pointer;
-      margin-top: 10px;
-      font-size: 14px;
-      transition: background-color 0.3s ease;
-      text-transform: uppercase;
-      margin-left: 0%;
-
-    }
-    .product-info button:hover {
-      background-color: #444;
-    }
-
-    }
   </style>
 </head>
 <body>
@@ -436,9 +336,8 @@
     </ul>
   </nav>
 
-
-  <!-- Produktdetail-Bereich -->
   <div id="product-detail">
+  </div>
 
   <script>
     /* -- Hamburger-Menü-Funktion -- */
@@ -484,6 +383,36 @@
       }
     }
 
+    /**
+     * Alle Produkte aus der gleichen Liga ODER dem gleichen Land laden.
+     * currentProductId wird ausgeschlossen, damit das aktuell angezeigte
+     * Produkt nicht nochmal in der Liste auftaucht.
+     */
+    async function fetchRelatedProducts(land, liga, currentProductId) {
+      try {
+        // Filter-Formel in Airtable: OR({Land} = 'XYZ', {Liga} = 'ABC')
+        // Leerzeichen, Umlaute etc. in den Werten ggf. enkodieren:
+        const filterFormula = `OR({Land}='${encodeURIComponent(land)}',{Liga}='${encodeURIComponent(liga)}')`;
+        const url = `https://api.airtable.com/v0/${BASE_ID}/${PRODUCTS_TABLE}?filterByFormula=${filterFormula}`;
+
+        const response = await fetch(url, {
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_API_KEY}`
+          }
+        });
+        const data = await response.json();
+
+        if (!data.records) return [];
+
+        // Filter: aktuelles Produkt entfernen
+        const related = data.records.filter(record => record.id !== currentProductId);
+        return related;
+      } catch (error) {
+        console.error('Fehler beim Abrufen der ähnlichen Produkte:', error);
+        return [];
+      }
+    }
+
     // Produktdetails anzeigen
     async function displayProductDetail(productId) {
       const productData = await fetchProduct(productId);
@@ -510,7 +439,6 @@
               <p class="preis"><strong>Preis:</strong> ${productData.fields.Preis || "Kein Preis"}</p>
               <p><strong>Grösse:</strong> ${productData.fields.Grösse || "Keine Grössenangabe"}</p>
               <p><strong>Spieler:</strong> ${productData.fields.Spieler || "Keine Bedruckung"}</p>
-              <p><strong>Lagerbestand:</strong> ${lagerbestand}</p>
 
               <p>
                 Wunschmenge:
@@ -524,6 +452,7 @@
                 >
               </p>
               <button
+                class="btn"
                 onclick="addToCart('${productData.id}')"
                 ${disableAttribute}
               >
@@ -532,9 +461,52 @@
             </div>
           </div>
         `;
+
+        // Ähnliche Produkte laden und anzeigen
+        const land = productData.fields.Land || "";
+        const liga = productData.fields.Liga || "";
+        displayRelatedProducts(land, liga, productId);
       } else {
         productDetail.textContent = 'Produktdetails können nicht geladen werden.';
       }
+    }
+
+    /**
+     * Zeigt unter dem Produkt weitere Trikots aus der gleichen Liga oder dem gleichen Land an.
+     */
+    async function displayRelatedProducts(land, liga, currentProductId) {
+      const relatedProductsContainer = document.getElementById("related-products");
+
+      // Falls kein Land/Liga angegeben, brechen wir lieber ab
+      if (!land && !liga) {
+        relatedProductsContainer.innerHTML = "<p>Keine ähnlichen Trikots verfügbar.</p>";
+        return;
+      }
+
+      const relatedRecords = await fetchRelatedProducts(land, liga, currentProductId);
+
+      if (!relatedRecords.length) {
+        relatedProductsContainer.innerHTML = "<p>Keine ähnlichen Trikots gefunden.</p>";
+        return;
+      }
+
+      // HTML für jedes ähnliche Produkt generieren
+      const relatedHTML = relatedRecords.map(record => {
+        const fields = record.fields;
+        const produktName = fields.ProduktName || "Unbekanntes Trikot";
+        const bildUrl = fields.Bild1 && fields.Bild1[0] ? fields.Bild1[0].url : "placeholder.jpg";
+
+        return `
+          <a href="product-detail.html?id=${record.id}" style="text-decoration:none; color:inherit;">
+            <div class="related-product-card">
+              <img src="${bildUrl}" alt="${produktName}">
+              <p>${produktName}</p>
+            </div>
+          </a>
+        `;
+      }).join("");
+
+      relatedProductsContainer.innerHTML = relatedHTML;
     }
 
     /**

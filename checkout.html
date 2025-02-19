@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout</title>
+  
+  <!-- EmailJS Script einbinden -->
+  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
   <style>
     /* RESET */
     * {
@@ -11,15 +15,15 @@
       padding: 0;
       box-sizing: border-box;
     }
-
+    
     /* Allgemeines Styling */
     body {
       font-family: "Roboto", sans-serif;
       background-color: white;
       color: black;
-      height: 100vh; /* Damit Overlay & Menü den ganzen Viewport abdecken */
+      height: 100vh;
     }
-
+    
     /* Header (fixiert) */
     header {
       position: fixed;
@@ -35,7 +39,7 @@
       border-bottom: 1px solid #eee;
       padding: 0 20px;
     }
-
+    
     /* Hamburger-Icon (linke Seite) */
     .hamburger {
       cursor: pointer;
@@ -55,7 +59,7 @@
       background: #000;
       transition: all 0.3s ease-in-out;
     }
-
+    
     /* Logo zentriert */
     .header-center {
       text-align: center;
@@ -63,7 +67,7 @@
     .header-center img {
       max-height: 70px;
     }
-
+    
     /* Icons (rechte Seite) */
     .header-icons {
       display: flex;
@@ -78,8 +82,8 @@
       height: 30px;
       cursor: pointer;
     }
-
-    /* OVERLAY & Side-Menu (über dem Header) */
+    
+    /* OVERLAY & Side-Menu */
     .menu-overlay {
       position: fixed;
       top: 0;
@@ -90,23 +94,23 @@
       opacity: 0;
       visibility: hidden;
       transition: all 0.3s ease-in-out;
-      z-index: 1000; /* über dem Header (999) */
+      z-index: 1000;
     }
     .side-menu {
       position: fixed;
       top: 0;
       left: 0;
-      width: 80%;         /* Breite des Menüs */
-      max-width: 400px;   /* Optionales Maximum */
+      width: 80%;
+      max-width: 400px;
       height: 100%;
       background: #fff;
       transform: translateX(-100%);
       transition: transform 0.3s ease-in-out;
-      z-index: 1001;      /* über dem Overlay */
+      z-index: 1001;
       padding: 20px;
     }
-
-    /* Close-Button (X) im Menü */
+    
+    /* Close-Button im Menü */
     .close-btn {
       background: none;
       border: none;
@@ -114,7 +118,7 @@
       cursor: pointer;
       margin-bottom: 20px;
     }
-
+    
     /* Menü-Liste */
     .menu-list {
       list-style: none;
@@ -132,7 +136,7 @@
       font-size: 16px;
       font-weight: 400;
     }
-
+    
     /* Offen-Status: Overlay & Menü eingeblendet */
     .menu-open .menu-overlay {
       opacity: 1;
@@ -141,18 +145,18 @@
     .menu-open .side-menu {
       transform: translateX(0);
     }
-
+    
     /* Hauptcontainer für Checkout */
     .checkout-container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
-      margin-top: 210px; /* Platz unter dem fixierten Header */
+      margin-top: 210px;
       display: flex;
       gap: 40px;
-      flex-wrap: wrap; /* bei kleineren Screens umbrechen */
+      flex-wrap: wrap;
     }
-
+    
     /* Formular-Bereich */
     .checkout-form {
       flex: 1 1 300px;
@@ -180,43 +184,79 @@
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-
-    /* Zusammenfassung */
+    
+    /* Zusammenfassung (Bestellübersicht) */
     .checkout-summary {
-      flex: 1 1 300px;
+      flex: 1 1 35%;
       min-width: 280px;
-      background-color: #f9f9f9;
-      border: 1px solid #ddd;
-      border-radius: 5px;
+      background-color: #ffffff;
+      border: none;
       padding: 20px;
       height: fit-content;
     }
     .checkout-summary h2 {
-      margin-top: 0;
-      font-weight: 500;
-      font-size: 20px;
+      font-size: 30px;
+      margin-bottom: 15px;
+      font-weight: 700;
     }
     .checkout-summary .summary-items {
       margin: 15px 0;
-      border-top: 1px solid #ccc;
-      padding-top: 15px;
     }
-    .checkout-summary p {
-      margin: 5px 0;
+    #summary-total {
+      font-size: 22px;
+      margin: 20px 0;
+      font-weight: 600;
     }
-    .checkout-summary button {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      margin-top: 10px;
-      cursor: pointer;
-      background-color: black;
-      color: white;
+    
+    /* BUTTON DESIGN */
+    .Btn {
+      width: 330px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgb(15, 15, 15);
       border: none;
-      transition: background-color 0.3s;
+      color: white;
+      font-weight: 600;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.103);
+      position: relative;
+      overflow: hidden;
+      transition-duration: 0.3s;
     }
-    .checkout-summary button:hover {
-      background-color: #333;
+    
+    .svgIcon {
+      width: 16px;
+    }
+    
+    .svgIcon path {
+      fill: white;
+    }
+    
+    .Btn::before {
+      width: 330px;
+      height: 160px;
+      position: absolute;
+      content: "";
+      background-color: white;
+      border-radius: 50%;
+      left: -100%;
+      top: 0;
+      transition-duration: 0.3s;
+      mix-blend-mode: difference;
+    }
+    
+    .Btn:hover::before {
+      transition-duration: 0.3s;
+      transform: translate(100%,-50%);
+      border-radius: 0;
+    }
+    
+    .Btn:active {
+      transform: translate(5px,5px);
+      transition-duration: 0.3s;
     }
   </style>
 </head>
@@ -247,24 +287,17 @@
   <nav class="side-menu" id="side-menu">
     <button class="close-btn" id="close-btn">✕</button>
     <ul class="menu-list">
-      <li>
-        <a href="index.html">HOME</a>
-      </li>
-      <li>
-        <a href="aboutus.html">ABOUT US</a>
-      </li>
-      <li>
-        <a href="contact.html">CONTACT</a>
-      </li>
+      <li><a href="index.html">HOME</a></li>
+      <li><a href="aboutus.html">ABOUT US</a></li>
+      <li><a href="contact.html">CONTACT</a></li>
     </ul>
   </nav>
-
 
   <!-- Hauptbereich: Checkout -->
   <div class="checkout-container">
     <!-- Formular-Bereich -->
     <div class="checkout-form">
-      <h2>Rechnungs- & Lieferdaten</h2>
+      <h2>Rechnungs- &amp; Lieferdaten</h2>
       <form id="checkoutForm">
         <label>
           Vorname:
@@ -273,6 +306,10 @@
         <label>
           Nachname:
           <input type="text" name="nachname" required />
+        </label>
+        <label>
+          E-Mail:
+          <input type="email" name="email" required />
         </label>
         <label>
           Strasse:
@@ -293,14 +330,19 @@
       </form>
     </div>
 
-    <!-- Zusammenfassung -->
+    <!-- Zusammenfassung (Bestellübersicht) -->
     <div class="checkout-summary">
       <h2>Bestellübersicht</h2>
       <div id="summary-items" class="summary-items">
         <!-- Hier werden die Produkte aus dem Warenkorb aufgelistet -->
       </div>
       <p id="summary-total">Gesamt: 0,00 €</p>
-      <button onclick="submitOrder()">Bestellung abschließen</button>
+      <button class="Btn" onclick="submitOrder()">
+        Bestellung abschließen
+        <svg class="svgIcon" viewBox="0 0 576 512">
+          <path d="M512 80c8.8 0 16 7.2 16 16v32H48V96c0-8.8 7.2-16 16-16H512zm16 144V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V224H528zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm56 304c-13.3 0-24 10.7-24 24s10.7 24 24 24h48c13.3 0 24-10.7 24-24s-10.7-24-24-24H120zm128 0c-13.3 0-24 10.7-24 24s10.7 24 24 24H360c13.3 0 24-10.7 24-24s-10.7-24-24-24H248z"></path>
+        </svg>
+      </button>
     </div>
   </div>
 
@@ -351,7 +393,7 @@
       summaryTotal.textContent = 'Gesamt: ' + gesamtpreis.toFixed(2) + ' €';
     }
 
-    /***** Bestellung abschicken *****/
+    /***** Bestellung abschicken mit EmailJS *****/
     const AIRTABLE_API_KEY = "patoJ0rbjGUzWuwKG.d2458e18c3f777dc341a8ff90fc66d55457ff3cafb219efbd82fa7575b05aaf9";
     const BASE_ID = "appJ5tDISO3meA1Sf";
     const ORDERS_TABLE = "Orders";
@@ -367,13 +409,15 @@
         strasse: formData.get('strasse'),
         hausnummer: formData.get('hausnummer'),
         stadt: formData.get('stadt'),
-        land: formData.get('land')
+        land: formData.get('land'),
+        email: formData.get('email')
       };
 
       const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
       const cartItemsString = JSON.stringify(cartItems);
 
       try {
+        // Bestellung in Airtable anlegen
         const response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${ORDERS_TABLE}`, {
           method: 'POST',
           headers: {
@@ -390,6 +434,7 @@
                   Hausnummer: customerData.hausnummer,
                   Stadt: customerData.stadt,
                   Land: customerData.land,
+                  Email: customerData.email,
                   ProductID: cartItemsString
                 }
               }
@@ -404,16 +449,29 @@
         // Lagerbestand aktualisieren
         await updateStock(cartItems);
 
-        // Warenkorb leeren, Zusammenfassung aktualisieren
-        localStorage.removeItem('cartItems');
-        loadCartSummary();
-        alert('Bestellung erfolgreich abgeschickt!');
-        window.location.href = "index.html";
-      } catch (error) {
-        console.error('Fehler:', error);
-        alert('Beim Abschicken der Bestellung ist ein Fehler aufgetreten.');
-      }
+        const templateParams = {
+        to_email: customerData.email,
+        to_name: customerData.vorname,
+        order_details: cartItemsString
+      };
+
+      emailjs.send("service_vgzvb3h", "template_pgssozz", templateParams)
+        .then(function(response) {
+          console.log('E-Mail erfolgreich gesendet!', response.status, response.text);
+        }, function(error) {
+          console.error('Fehler beim Senden der E-Mail:', error);
+        });
+
+      // Warenkorb leeren und Zusammenfassung aktualisieren
+      localStorage.removeItem('cartItems');
+      loadCartSummary();
+      alert('Bestellung erfolgreich abgeschickt!');
+      window.location.href = "index.html";
+    } catch (error) {
+      console.error('Fehler:', error);
+      alert('Beim Abschicken der Bestellung ist ein Fehler aufgetreten.');
     }
+  }
 
     async function updateStock(cartItems) {
       for (const item of cartItems) {
@@ -450,7 +508,7 @@
       }
     }
 
-    // Beim Laden der Seite Warenkorb-Zusammenfassung erstellen
+    // Warenkorb-Zusammenfassung beim Laden der Seite erstellen
     window.addEventListener('DOMContentLoaded', loadCartSummary);
   </script>
 </body>

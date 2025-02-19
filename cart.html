@@ -15,8 +15,8 @@
     /* Allgemeines Styling */
     body {
       font-family: "Roboto", sans-serif;
-      background-color: white;
-      color: black;
+      background-color: #ffffff;
+      color: #000000;
       height: 100vh; /* Damit Overlay & Menü den ganzen Viewport füllen können */
     }
 
@@ -151,7 +151,7 @@
       margin-bottom: 20px;
     }
 
-    /* Container für Warenkorb */
+    /************ CART-STYLING ************/
     .cart-container {
       display: flex;
       justify-content: space-between;
@@ -159,27 +159,32 @@
       margin: 0 auto;
       padding: 20px;
       gap: 20px;
-      flex-wrap: wrap; /* bricht bei kleineren Viewports um */
+      flex-wrap: wrap; /* Bricht bei kleineren Viewports um */
+      margin-top: 5%;
     }
+
+    /* Linke Spalte: Artikel */
     .cart-items {
       flex: 1 1 60%;
       min-width: 300px;
     }
+
+    /* Rechte Spalte: Zusammenfassung */
     .cart-summary {
       flex: 1 1 35%;
       min-width: 280px;
-      background-color: #fafafa;
-      border: 1px solid #ddd;
-      border-radius: 5px;
+      background-color: #ffffff;
+      border: none;
       padding: 20px;
       height: fit-content;
     }
     .cart-summary h2 {
+      font-size: 30px;
       margin-bottom: 15px;
-      font-weight: 500;
+      font-weight: 700;
     }
 
-    /* Einzelne Artikel */
+    /* Einzelne Artikel-Zeile */
     .cart-item {
       display: flex;
       justify-content: space-between;
@@ -190,53 +195,110 @@
     .cart-item:last-child {
       border-bottom: none;
     }
+
+    /* Produktbild */
     .cart-item img {
-      width: 70px;
-      height: 70px;
+      width: 40%;
+      height: auto;
       object-fit: cover;
       margin-right: 15px;
     }
+
     .cart-item-details {
       flex: 1;
     }
     .cart-item-details p {
       margin: 3px 0;
+      font-size: 16px;
     }
+    .cart-item-details p strong {
+      font-size: 17px;
+    }
+
+    /* Buttons für + / - / x */
     .cart-actions {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 10px;
     }
     .cart-actions button {
       padding: 5px 10px;
       cursor: pointer;
       border: 1px solid #999;
       background: #fff;
+      font-size: 14px;
     }
 
-    /* Zusammenfassung & Checkout */
+    /* Gesamtpreis */
     #cart-total {
-      font-size: 18px;
-      margin: 10px 0;
+      font-size: 22px;
+      margin: 20px 0;
+      font-weight: 600;
     }
-    .checkout-buttons button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      font-size: 14px;
-      background-color: black;
-      color: white;
+
+    /* Checkout-Buttons */
+    .checkout-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /************ BUTTON DESIGN ************/
+    .Btn {
+      width: 330px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgb(15, 15, 15);
       border: none;
+      color: white;
+      font-weight: 600;
+      gap: 8px;
       cursor: pointer;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.103);
+      position: relative;
+      overflow: hidden;
+      transition-duration: .3s;
     }
-    .checkout-buttons button:hover {
-      background-color: #333;
+
+    .svgIcon {
+      width: 16px;
+    }
+
+    .svgIcon path {
+      fill: white;
+    }
+
+    .Btn::before {
+      width: 330px;
+      height: 160px;
+      position: absolute;
+      content: "";
+      background-color: white;
+      border-radius: 50%;
+      left: -100%;
+      top: 0;
+      transition-duration: .3s;
+      mix-blend-mode: difference;
+    }
+
+    .Btn:hover::before {
+      transition-duration: .3s;
+      transform: translate(100%,-50%);
+      border-radius: 0;
+    }
+
+    .Btn:active {
+      transform: translate(5px,5px);
+      transition-duration: .3s;
     }
 
     /* Mobile: cart-Layout auf Spalten-Layout umstellen */
     @media (max-width: 768px) {
       .cart-container {
         flex-direction: column;
+        margin-top: 30%;
       }
       .cart-items, .cart-summary {
         width: 100%;
@@ -271,6 +333,7 @@
     </div>
   </header>
 
+  <!-- Overlay + Side Menu -->
   <div class="menu-overlay" id="menu-overlay"></div>
   <nav class="side-menu" id="side-menu">
     <button class="close-btn" id="close-btn">✕</button>
@@ -287,10 +350,6 @@
     </ul>
   </nav>
 
-
-  <!-- Hauptüberschrift -->
-  <h1>Your Bag</h1>
-
   <!-- Warenkorb-Bereich -->
   <div class="cart-container">
     <!-- Artikel-Liste -->
@@ -301,10 +360,15 @@
     <!-- Zusammenfassung -->
     <div class="cart-summary">
       <h2>Order Summary</h2>
-      <p id="cart-total">Total: 0,00 €</p>
+      <p id="cart-total">Total: €0,00</p>
       <div class="checkout-buttons">
-        <button onclick="clearCart()">Clear Bag</button>
-        <button onclick="completeOrder()">Checkout</button>
+        <button class="Btn" onclick="clearCart()">Clear Bag</button>
+        <button class="Btn" onclick="completeOrder()">
+          Pay
+          <svg class="svgIcon" viewBox="0 0 576 512">
+            <path d="M512 80c8.8 0 16 7.2 16 16v32H48V96c0-8.8 7.2-16 16-16H512zm16 144V416c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V224H528zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm56 304c-13.3 0-24 10.7-24 24s10.7 24 24 24h48c13.3 0 24-10.7 24-24s-10.7-24-24-24H120zm128 0c-13.3 0-24 10.7-24 24s10.7 24 24 24H360c13.3 0 24-10.7 24-24s-10.7-24-24-24H248z"></path>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
@@ -339,7 +403,7 @@
       cartContainer.innerHTML = '';
       if (cartItems.length === 0) {
         cartContainer.innerHTML = '<p>Your bag is empty.</p>';
-        cartTotalElement.textContent = 'Total: 0,00 €';
+        cartTotalElement.textContent = 'Total: €0,00';
         return;
       }
 
@@ -411,7 +475,7 @@
       loadCartItems();
     }
 
-    // „Checkout“ -> Weiterleitung
+    // „Pay“ -> Weiterleitung
     function completeOrder() {
       window.location.href = "checkout.html";
     }
